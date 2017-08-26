@@ -1,0 +1,51 @@
+{
+  "name": "gongmo",
+  "version": "1.0.0",
+  "description": "창의 it 공모 제출 시스템",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production pm2 start index.js --name=\"gongmo\" --log-date-format=\"YYYY-MM-DD HH:mm Z\"",
+    "stop": "pm2 stop gongmo",
+    "restart": "pm2 restart gongmo",
+    "logs": "pm2 logs gongmo",
+    "status": "pm2 show gongmo",
+    "dev": "cross-env NODE_ENV=development pm2-dev index.js --name=\"gongmo-dev\"",
+    "build-dev": "cross-env NODE_ENV=development webpack",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "pre-commit": [
+    "build"
+  ],
+  "author": "a1p4ca",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "bulma": "^0.5.1",
+    "compression": "^1.7.0",
+    "express": "^4.15.4",
+    "express-mysql-session": "^1.2.2",
+    "express-session": "^1.15.5",
+    "helmet": "^3.8.1",
+    "morgan": "^1.8.2",
+    "multer": "^1.3.0",
+    "pug": "^2.0.0-rc.3",
+    "serve-favicon": "^2.4.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "cross-env": "^5.0.5",
+    "css-loader": "^0.28.5",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "node-sass": "^4.5.3",
+    "pm2": "^2.6.1",
+    "pre-commit": "^1.2.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "webpack": "^3.5.5"
+  }
+}
