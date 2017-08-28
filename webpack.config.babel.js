@@ -2,11 +2,18 @@ import path from 'path'
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
+const sources = './assets/js'
+
 export default {
-  entry: './assets/js/index.js',
+  entry: {
+    index: `${sources}/index`,
+    submit: `${sources}/submit`,
+    admin: `${sources}/admin`,
+    bbs: `${sources}/bbs`
+},
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    path: path.join(__dirname, 'dist'),
+    filename: '[name].bundle.js'
   },
   module: {
     rules: [
@@ -22,7 +29,8 @@ export default {
             {
               loader: 'css-loader',
               options: {
-                sourceMap: true
+                sourceMap: true,
+                minimize: true
               }
             },
             {
@@ -54,10 +62,17 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: '"production"' }
     }),
+    /*
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'commons',
+      filename: 'commons.js'
+    }),
+    */
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: { warnings: false }
     }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.LoaderOptionsPlugin({ minimize: true })
   ])
 }
