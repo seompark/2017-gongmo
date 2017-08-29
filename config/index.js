@@ -1,4 +1,5 @@
 module.exports = {
+  host: 'https://gongmo.dimigo.hs.kr',
   secret: 'I\'m SECRET!!',
   port: 5494,
   mysql: {
@@ -12,7 +13,7 @@ module.exports = {
     port: 3306
   },
   dimigo: {
-    user: 'user',
-    password: 'password'
+    user: 'dimigoin',
+    password: 'dktmsjf#@!'
   }
 }
