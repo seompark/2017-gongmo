@@ -6,6 +6,7 @@ const sources = './assets/js'
 
 export default {
   entry: {
+    commons: `${sources}/commons`,
     index: `${sources}/index`,
     submit: `${sources}/submit`,
     admin: `${sources}/admin`,

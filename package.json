@@ -10,7 +10,7 @@
     "logs": "pm2 logs gongmo",
     "status": "pm2 show gongmo",
     "dev": "cross-env NODE_ENV=development pm2-dev index.js --name=\"gongmo-dev\"",
-    "build-dev": "cross-env NODE_ENV=development webpack",
+    "build-dev": "cross-env NODE_ENV=development webpack --hide-modules --watch",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

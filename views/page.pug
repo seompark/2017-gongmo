@@ -1,14 +1,17 @@
 extends layout
 
 append body
-    nav.navbar.has-shadow(style='position: fixed; z-index: 2; width: 100vw;'): .container
+    header: nav.navbar.has-shadow#navbar: .container
         .navbar-brand
-            a.navbar-item(href='/')
-                img(src='https://contest.dimigo.hs.kr/static/img/logo_text.png?ver=0.0.2')
+            a.navbar-item#logo(href='/')
+                img(src='https://www.dimigo.hs.kr/layouts/minimal_dimigo/static/dimigo_logo_white.png')
         .navbar-menu.nav-right
             unless user.isAnonymous
-                .navbar-item= `${user.fullName}님 환영합니다`
-                .navbar-item: .button.is-danger.is-outlined 로그아웃
+                .navbar-item.has-text-white= `${user.fullName}님 환영합니다`
+                .navbar-item
+                    form(action='/logout', method='post')
+                        button.button.is-outlined#logout(type='submit') 로그아웃
             else
-                .button.navbar-item 로그인
-    block contents
+                a.button.navbar-item(href='/login') 로그인
+    main
+        block contents
