@@ -9,7 +9,7 @@
     "restart": "pm2 restart gongmo",
     "logs": "pm2 logs gongmo",
     "status": "pm2 show gongmo",
-    "dev": "cross-env NODE_ENV=development pm2-dev index.js --name=\"gongmo-dev\"",
+    "dev": "cross-env NODE_ENV=production concurrently \"pm2-dev index.js --name 'gongmo-dev' \" \"npm run build-dev\"",
     "build-dev": "cross-env NODE_ENV=development webpack --hide-modules --watch",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -38,6 +38,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
+    "concurrently": "^3.5.0",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.5",
     "extract-text-webpack-plugin": "^3.0.0",
