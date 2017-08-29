@@ -10,5 +10,9 @@ module.exports = {
     },
     host: 'localhost',
     port: 3306
+  },
+  dimigo: {
+    user: 'user',
+    password: 'password'
   }
 }
