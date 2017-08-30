@@ -38,6 +38,10 @@ h1, h2, h3, h4, h5 {
   transition: .5s all;
 }
 
+.subtitle:not(:last-child), .title:not(:last-child) {
+  margin-bottom: 3rem;
+}
+
 #submit-link-btn:hover {
   border-color: $danger;
 }

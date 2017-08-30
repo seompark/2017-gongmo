@@ -1,0 +1,20 @@
+extends layout
+
+append body
+    section.hero.is-fullheight.is-primary
+        .hero-body: .container
+            .columns.is-centered
+                .card
+                    .card-content
+                        .column: p.control.has-icons-left
+                            input.is-medium.input(placeholder='아이디')
+                            span.icon.is-left
+                                i.fa.fa-envelope
+                        .column: p.control.has-icons-left
+                            input.is-medium.input(type='password', placeholder='비밀번호')
+                            span.icon.is-left
+                                i.fa.fa-lock
+                        p.column
+                            button.button.is-primary.is-medium.is-fullwidth
+                                i.fa.fa-user
+                                | &nbsp;로그인

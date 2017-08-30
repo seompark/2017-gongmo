@@ -11,7 +11,7 @@ export default {
     submit: `${sources}/submit`,
     admin: `${sources}/admin`,
     bbs: `${sources}/bbs`
-},
+  },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].bundle.js'
