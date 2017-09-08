@@ -51,14 +51,15 @@ export default {
       }
     ]
   },
-  devtool: 'eval-source-map',
+  // TODO dev server setting
+  devtool: '#eval-source-map',
   plugins: [
     new ExtractTextPlugin('bundle.css')
   ]
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = 'source-map'
+  module.exports.devtool = '#source-map'
   module.exports.plugins = (module.exports.plugins || []).concat([
     new webpack.DefinePlugin({
       'process.env': { NODE_ENV: '"production"' }
