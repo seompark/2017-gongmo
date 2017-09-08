@@ -1,5 +1,8 @@
 node_modules/
 config/index.js
 .idea/
-contents/
+contents/file/*
+contents/forms/*
+!contents/file/.gitkeep
+!contents/forms/.gitkeep
 sessions/
