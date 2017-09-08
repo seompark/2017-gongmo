@@ -1,1 +1,1 @@
-import '../scss/customize.scss'
+import '../scss/main.scss'

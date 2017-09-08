@@ -1,17 +1,7 @@
 extends layout
 
 append body
-    header: nav.navbar.has-shadow#navbar: .container
-        .navbar-brand
-            a.navbar-item#logo(href='/')
-                img(src='https://www.dimigo.hs.kr/layouts/minimal_dimigo/static/dimigo_logo_white.png')
-        .navbar-menu.nav-right
-            unless user.isAnonymous
-                .navbar-item.has-text-white= `${user.fullName}님 환영합니다`
-                .navbar-item
-                    form(action='/logout', method='post')
-                        button.button.is-outlined#logout(type='submit') 로그아웃
-            else
-                a.button.navbar-item(href='/login') 로그인
+    header
+        include navbar
     main
         block contents

@@ -1,20 +1,22 @@
 extends layout
 
 append body
-    section.hero.is-fullheight.is-primary
+    section.hero.is-fullheight.is-primary.is-bold
         .hero-body: .container
             .columns.is-centered
-                .card
-                    .card-content
+                .column.card.is-4
+                    .card-content: form.form(method='post')
                         .column: p.control.has-icons-left
-                            input.is-medium.input(placeholder='아이디')
+                            input.is-medium.input(name='id', placeholder='아이디')
                             span.icon.is-left
-                                i.fa.fa-envelope
+                                i.fa.fa-user
                         .column: p.control.has-icons-left
-                            input.is-medium.input(type='password', placeholder='비밀번호')
+                            input.is-medium.input(name='password', type='password', placeholder='비밀번호')
                             span.icon.is-left
                                 i.fa.fa-lock
-                        p.column
-                            button.button.is-primary.is-medium.is-fullwidth
-                                i.fa.fa-user
-                                | &nbsp;로그인
+                        if messages.error
+                            .column: p.is-danger= messages.error
+                        .column
+                            button.button.is-primary.is-medium.is-fullwidth.submit
+                                | 로그인
+    

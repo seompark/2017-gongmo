@@ -1,6 +1,16 @@
 extends page
 
 append contents
-
+    .container: .section
+        .card.container(style='position: relative;')
+            .card-content.section
+                h1.title 접수하기
+                .field
+                    label.label 우왕
+                    .field.is-grouped
+                        .control.has-icon-left
+                            input.input
+                        .control.has-icon-left
+                            input.input
 append script
     script(src='/submit.bundle.js')

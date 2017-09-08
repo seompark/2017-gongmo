@@ -1,0 +1,13 @@
+nav.navbar.has-shadow#navbar: .container
+    .navbar-brand
+        a.navbar-item#logo(href='/')
+            img(src='https://www.dimigo.hs.kr/layouts/minimal_dimigo/static/dimigo_logo.png')
+    .navbar-menu.nav-right
+        if user
+            .navbar-item= `${user.name}님 환영합니다`
+            .navbar-item
+                form(action='/logout', method='post')
+                    button.button.is-primary.is-outlined#logout(type='submit') 로그아웃
+        else
+            .navbar-item
+                a.button.is-primary.has-text-white(href='login') 로그인

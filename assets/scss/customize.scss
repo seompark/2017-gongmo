@@ -1,3 +1,4 @@
+@import './initialize.scss';
 @import '~bulma/bulma';
 @import url(https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css);
 
@@ -5,62 +6,10 @@ h1, h2, h3, h4, h5 {
   font-family: 'Nanum Square';
 }
 
+a {
+  color: #6a6a6a;
+}
+
 .title {
-  font-weight: 600;
-  @include mobile {
-    font-size: 9vw;
-  }
-  @include tablet {
-    font-size: 5vw;
-  }
-  @include desktop {
-    font-size: 4rem;
-  }
-}
-
-.subtitle {
-  @include mobile {
-    font-size: 5vw;
-  }
-  @include tablet {
-    font-size: 3vw;
-  }
-  @include desktop {
-    font-size: 2rem;
-  }
-}
-
-#submit-link-btn {
-  border: 2px solid transparent $danger-invert;
-  @include desktop {
-    width: 10vw;
-  }
-  transition: .5s all;
-}
-
-.subtitle:not(:last-child), .title:not(:last-child) {
-  margin-bottom: 3rem;
-}
-
-#submit-link-btn:hover {
-  border-color: $danger;
-}
-
-#logout-btn {
-  margin: 10px;
-}
-
-#navbar {
-  position: fixed;
-  width: 100vw;
-  background-color: rgba(0, 0, 0, .5);
-}
-
-#logo:hover {
-  background-color: rgb(10, 10, 10);
-  color: rgb(10, 10, 10);
-}
-
-#main-hero {
-  background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(https://contest.dimigo.hs.kr/static/img/back_.jpg) no-repeat;
+  font-weight: 500 !important;
 }
