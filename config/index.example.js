@@ -1,10 +1,16 @@
 module.exports = {
-  host: 'https://gongmo.dimigo.hs.kr',
   secret: 'I\'m SECRET!!',
-  port: 5494,
-
+  port: 8080,
   dimigo: {
-    user: 'user',
+    host: '',
+    username: 'user',
     password: 'pwd'
+  },
+  db: {
+    host: 'localhost',
+    port: '',
+    username: '',
+    password: '',
+    database: ''
   }
 }

@@ -6,19 +6,22 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const flash = require('express-flash')
-const passport = require('passport')
-const FileStore = require('session-file-store')(session)
+// const FileStore = require('session-file-store')(session)
 
 const config = require('./config')
+const knexconfig = require('./knexfile')
+const knex = require('./src/db/knex')
 const routes = require('./routes')
 
 const path = require('path')
+
+knex.migrate.latest([knexconfig])
 
 const app = express()
 const port = process.env.PORT || config.port
 const sess = {
   secret: config.secret,
-  store: new FileStore(),
+  // store: new FileStore(),
   resave: true,
   saveUninitialized: false
 }
@@ -36,8 +39,6 @@ app.use(express.static(app.get('static')))
 app.use(compression())
 app.use(helmet())
 app.use(flash())
-app.use(passport.initialize())
-app.use(passport.session())
 
 routes(app)
 
