@@ -1,13 +1,11 @@
 const config = require('../../config')
-const dimi = new (require('dimigo'))({
-  host: config.host,
-  user: config.dimigo.user,
-  password: config.dimigo.password
-})
+const Dimigo = require('dimigo')
+const dimi = new Dimigo(config.dimigo)
 
-module.exports.verifyUser = (req, res, next) => {
+module.exports.verifyPermission = (req, res, next) => {
+  console.log(req.session.user)
   if (!req.session.user) {
-    res.redirect('/' + req.session.redirectTo)
+    return res.redirect('/login')
   }
   return next()
 }
