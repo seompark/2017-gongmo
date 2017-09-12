@@ -1,7 +1,12 @@
 extends page
 
 append body
-    .container
-        section.section
+    .columns
+        aside.column.menu.is-4
+            ul.menu-list
+                li.a 공지사항
+                li.a 신청 내역
+        .column.container
+            section.section
 append script
     script(src='/admin.bundle.js')

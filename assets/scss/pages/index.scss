@@ -1,4 +1,4 @@
-@import './initialize';
+@import 'initialize';
 
 .title {
   font-weight: 600;
@@ -32,7 +32,6 @@
 #main-hero {
   background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(https://media.gcflearnfree.org/content/5588514bf07fac61f8440cf9_06_22_2015/keyboardandmouse_handsonkeyboard.png) center / cover;
 }
-
 
 #submit-link-btn {
   color: #fff;
