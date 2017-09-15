@@ -12,12 +12,11 @@ module.exports = class {
    *
    * @param {Team} team
    */
-  constructor ({name, leaderId, followers, formPath, serviceDomain}) {
+  constructor ({name, leaderId, followers, description}) {
     this.name = name
     this.leaderId = leaderId
     this.followers = followers
-    this.formPath = formPath
-    this.serviceDomain = serviceDomain
+    this.description = description
   }
 
   /**
@@ -28,11 +27,10 @@ module.exports = class {
     await team.insert({
       name: this.name,
       leader: this.leaderId,
-      form_path: this.formPath,
-      serviceDomain: this.serviceDomain
+      description: this.description
     })
     for (const value in this.followers) {
-      follower.insert({
+      await follower.insert({
         id: value.id,
         name: value.name
       })
@@ -47,5 +45,14 @@ module.exports = class {
   static async findByLeaderId (id) {
     const followers = await team.slect().where({ leaderId: id })
     return followers
+  }
+
+  /**
+   * 모든 팀 정보를 가져온다.
+   * TODO
+   * @returns {Promise}
+   */
+  static async getList () {
+
   }
 }

@@ -56,10 +56,4 @@
 .notice-card {
   animation: 1s ease-in;
   margin: 40px 0 0 40px;
-  min-height: 200px;
-  & .content p {
-    text-overflow: ellipsis;
-    white-space: pre-wrap;
-    overflow: hidden;
-  }
 }

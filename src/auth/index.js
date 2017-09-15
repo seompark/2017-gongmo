@@ -2,18 +2,32 @@ const config = require('../../config')
 const Dimigo = require('dimigo')
 const dimi = new Dimigo(config.dimigo)
 
-module.exports.verifyPermission = (req, res, next) => {
-  console.log(req.session.user)
-  if (!req.session.user) {
-    return res.redirect('/login')
+const TYPE = {
+  'T': Infinity,
+  'D': Infinity,
+  'S': 0,
+  'P': 1,
+  'O': 0
+}
+
+module.exports.verifyPermission = perm => (req, res, next) => {
+  const user = req.user = req.session.user
+  if (!user) {
+    const redirect = req.originalUrl
+    return res.redirect(`/login?redirect=${redirect}`)
+  }
+  console.log(TYPE[user.userType], TYPE[perm])
+  if (!(TYPE[user.userType] >= TYPE[perm])) {
+    res.status(401)
+    return res.end()
   }
   return next()
 }
 
 module.exports.identifyUser = async (name, password) => {
-  const result = await dimi.identifyUser(name, password)
-  if (result.status === 404) {
-    return false
-  }
+  let result = false
+  try {
+    result = await dimi.identifyUser(name, password)
+  } catch (err) { }
   return result
 }

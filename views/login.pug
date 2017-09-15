@@ -2,21 +2,18 @@ extends layout
 
 append body
     section.hero.is-fullheight.is-primary.is-bold
-        .hero-body: .container
-            .columns.is-centered
-                .column.card.is-4
-                    .card-content: form.form(method='post')
-                        .column: p.control.has-icons-left
-                            input.is-medium.input(name='id', placeholder='아이디')
-                            span.icon.is-left
-                                i.fa.fa-user
-                        .column: p.control.has-icons-left
-                            input.is-medium.input(name='password', type='password', placeholder='비밀번호')
-                            span.icon.is-left
-                                i.fa.fa-lock
-                        if messages.error
-                            .column: p.is-danger= messages.error
-                        .column
-                            button.button.is-primary.is-medium.is-fullwidth.submit
-                                | 로그인
-    
+        .hero-body: .is-centered
+            .card
+                .card-content: form.form(method='post')
+                    .field: .control.has-icons-left
+                        input.is-medium.input(name='id', placeholder='아이디')
+                        span.icon.is-left
+                            i.fa.fa-user
+                    .field: p.control.has-icons-left
+                        input.is-medium.input(name='password', type='password', placeholder='비밀번호')
+                        span.icon.is-left
+                            i.fa.fa-lock
+                    if messages.error
+                        p.is-danger= messages.error
+                    button.button.is-primary.is-medium.is-fullwidth.submit
+                        | 로그인

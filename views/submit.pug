@@ -2,15 +2,51 @@ extends page
 
 append contents
     .container: .section
-        .card.container(style='position: relative;')
-            .card-content.section
-                h1.title 접수하기
+        .container(style='position: relative;')
+            .field
                 .field
-                    label.label 우왕
+                    label.label 팀명
+                    .control
+                        input.input
+                label.label 팀장
+                .field.is-grouped
+                    .control
+                        input.input(placeholder='1410', disabled)
+                    .control
+                        input.input.is-disabled(placeholder='박성민', disabled)
+                label.label 신청자 2
                     .field.is-grouped
                         .control.has-icon-left
-                            input.input
+                            input.input(placeholder='학번')
                         .control.has-icon-left
-                            input.input
+                            input.input(placeholder='이름')
+                        .control
+                            button.button -
+                label.label 신청자 3
+                    .field.is-grouped
+                        .control.has-icon-left
+                            input.input(placeholder='학번')
+                        .control.has-icon-left
+                            input.input(placeholder='이름')
+                        .control
+                            button.button -
+                label.label 신청자 4
+                    .field.is-grouped
+                        .control.has-icon-left
+                            input.input(placeholder='학번')
+                        .control.has-icon-left
+                            input.input(placeholder='이름')
+                        .control
+                            button.button -
+                label.label 신청자 5
+                    .field.is-grouped
+                        .control.has-icon-left
+                            input.input(placeholder='학번')
+                        .control.has-icon-left
+                            input.input(placeholder='이름')
+                        .control
+                            button.button -
+                button.button +
+
 append script
     script(src='/submit.bundle.js')
