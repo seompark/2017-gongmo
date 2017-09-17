@@ -42,4 +42,8 @@ app.use(flash())
 
 routes(app)
 
+app.use((req, res) => {
+  res.status(404)
+  res.render('404')
+})
 app.listen(port, () => console.log(`App listens on port ${port}`))

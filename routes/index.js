@@ -1,5 +1,6 @@
 const path = require('path')
 const auth = require('../src/auth')
+const Team = require('../src/db/Team')
 
 module.exports = app => {
   const bbsMock = {
@@ -54,7 +55,7 @@ module.exports = app => {
       })
     })
 
-  // app.use('/submit'/*, auth.verifyPermission('S') */)
+  app.use('/submit', auth.verifyPermission('S'))
   app.route('/submit')
     .get((req, res) => {
       res.render('submit', {
@@ -63,11 +64,25 @@ module.exports = app => {
     })
     .post((req, res) => {
       const body = req.body
-      if (!req.body) return res.sendStatus(400)
-      const leader = body.leader
-      const name = body.name || leader.name
-      const followers = body.followers || []
-
+      if (!(req.body && req.body.leader)) return res.sendStatus(400)
+      const leader = {
+        name: req.session.user.name,
+        id: req.session.user.id
+      }
+      const { name, followers, description } = body
+      const team = new Team({
+        name,
+        leader,
+        followers,
+        description
+      })
+      team.save()
+        .then(() => {
+          res.json({
+            success: true
+          })
+        })
+        .catch(console.error)
     })
 
   app.route('/download')
@@ -110,5 +125,5 @@ module.exports = app => {
       res.render('bbs', bbsMock)
     })
 
-  require('./admin')(app)
+  app.use('/admin', auth.verifyPermission('T', false), require('./admin'))
 }

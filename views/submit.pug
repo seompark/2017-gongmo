@@ -1,52 +1,79 @@
 extends page
 
 append contents
-    .container: .section
-        .container(style='position: relative;')
-            .field
+    .container.section
+        .field.is-horizontal
+            .field-label
+                label.label 팀명
+            .field-body
                 .field
-                    label.label 팀명
                     .control
                         input.input
+        .field.is-horizontal
+            .field-label
                 label.label 팀장
-                .field.is-grouped
-                    .control
-                        input.input(placeholder='1410', disabled)
-                    .control
-                        input.input.is-disabled(placeholder='박성민', disabled)
-                label.label 신청자 2
-                    .field.is-grouped
-                        .control.has-icon-left
-                            input.input(placeholder='학번')
-                        .control.has-icon-left
-                            input.input(placeholder='이름')
-                        .control
-                            button.button -
-                label.label 신청자 3
-                    .field.is-grouped
-                        .control.has-icon-left
-                            input.input(placeholder='학번')
-                        .control.has-icon-left
-                            input.input(placeholder='이름')
-                        .control
-                            button.button -
-                label.label 신청자 4
-                    .field.is-grouped
-                        .control.has-icon-left
-                            input.input(placeholder='학번')
-                        .control.has-icon-left
-                            input.input(placeholder='이름')
-                        .control
-                            button.button -
-                label.label 신청자 5
-                    .field.is-grouped
-                        .control.has-icon-left
-                            input.input(placeholder='학번')
-                        .control.has-icon-left
-                            input.input(placeholder='이름')
-                        .control
-                            button.button -
-                button.button +
+            .field-body
+                .field
+                    .control.is-expanded
+                        input.input(value='1410', disabled)
+                .field
+                    .control.is-expanded
+                        input.input.is-disabled(value='박성민', disabled)
+                .field
+                    p.control.is-expanded
+        .field.is-horizontal
+            .field-label.is-normal
+                label.label 팀원
+            .field-body
+                .field
+                    p.control
+                        input.input(placeholder='학번')
+                .field
+                    p.control
+                        input.input(placeholder='이름')
+                .field
+                    p.control
+                        button.button(type='button', style='width: 200px') -
+        .field.is-horizontal
+            .field-label
+            .field-body
+                .field
+                    p.control
+                        input.input(placeholder='학번')
+                .field
+                    p.control
+                        input.input(placeholder='이름')
+                .field
+                    p.control
+                        button.button(type='button') -
+        .field.is-horizontal
+            .field-label
+            .field-body
+                .field
+                    p.control
+                        input.input(placeholder='학번')
+                .field
+                    p.control
+                        input.input(placeholder='이름')
+                .field
+                    p.control
+                        button.button(type='button') -
+        .field.is-horizontal
+            .field-label
+            .field-body
+                .field
+                    p.control
+                        input.input(placeholder='학번')
+                .field
+                    p.control
+                        input.input(placeholder='이름')
+                .field
+                    p.control
+                        button.button(type='button') -
+        .field.is-horizontal
+            .field-label
+            .field-body
+                button.button(type='button') +
 
 append script
     script(src='/submit.bundle.js')

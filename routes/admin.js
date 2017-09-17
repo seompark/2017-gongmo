@@ -1,20 +1,19 @@
-const auth = require('../src/auth')
+const Router = require('express').Router
+const router = new Router()
 
-module.exports = app => {
-  app.use('/admin', auth.verifyPermission('T'))
+router.route('/')
+.get((req, res) => {
+  res.render('admin', {user: req.user})
+})
 
-  app.route('/admin')
-    .get((req, res) => {
-      res.render('admin', {user: req.user})
-    })
+router.route('/forms')
+.get((req, res) => {
 
-  app.route('/admin/forms')
-    .get((req, res) => {
+})
 
-    })
+router.route('/forms/download')
+.get((req, res) => {
 
-  app.route('/admin/forms/download')
-    .get((req, res) => {
+})
 
-    })
-}
+module.exports = router

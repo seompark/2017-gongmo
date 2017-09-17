@@ -2,19 +2,18 @@ const knex = require('./knex')
 const team = knex('teams')
 const follower = knex('followers')
 
-module.exports = class {
+class Team {
   /**
    * @typedef {Object} Team
-   * @property {number} leaderId
+   * @property {Object} leader
    * @property {Array<Object>} followers
-   * @property {string} formPath
-   * @property {string} serviceDomain
+   * @property {string} description
    *
    * @param {Team} team
    */
-  constructor ({name, leaderId, followers, description}) {
+  constructor ({leader, name = leader.name, followers = [], description = ''}) {
     this.name = name
-    this.leaderId = leaderId
+    this.leader = leader
     this.followers = followers
     this.description = description
   }
@@ -24,13 +23,17 @@ module.exports = class {
    * @returns {Promise}
    */
   async save () {
+    await follower.where({ leader_id: this.leader.id }).delete()
+    await team.where({ leader_id: this.leader.id }).delete()
     await team.insert({
       name: this.name,
-      leader: this.leaderId,
+      leader_id: this.leader.id,
+      leader_name: this.leader.name,
       description: this.description
     })
-    for (const value in this.followers) {
+    for (const value of this.followers) {
       await follower.insert({
+        leader_id: this.leader.id,
         id: value.id,
         name: value.name
       })
@@ -39,20 +42,58 @@ module.exports = class {
 
   /**
    * 팀장 학번으로 팀 정보를 가져온다.
-   * @param {string} id
-   * @returns {Promise}
+   * @param {number} id
+   * @returns {Promise.<Team>}
    */
   static async findByLeaderId (id) {
-    const followers = await team.slect().where({ leaderId: id })
-    return followers
+    const followers = await follower.where({ leader_id: id }).select()
+    const tm = await team.where({ leader_id: id }).select()[0]
+    if (!tm) throw new Error('Team not found')
+    return new Team({
+      name: tm.name,
+      leader: { id: tm.leader_id, name: tm.leader_name },
+      followers,
+      description: tm.description
+    })
   }
 
   /**
    * 모든 팀 정보를 가져온다.
    * TODO
-   * @returns {Promise}
+   * @returns {Promise.<Object, Error>}
    */
   static async getList () {
+    const followers = await team.select(
+      'teams.name as team_name',
+      'teams.leader_id',
+      'teams.leader_name',
+      'teams.description',
+      'followers.name',
+      'followers.id'
+    )
+    .innerJoin('followers', 'teams.leader_id', 'followers.leader_id')
 
+    const teams = {}
+    followers.forEach(v => {
+      let tm = teams[v.team_name]
+      if (!tm) {
+        tm = teams[v.team_name] = new Team({
+          name: v.team_name,
+          leader: {
+            id: v.leader_id,
+            name: v.leader_name
+          },
+          description: v.description,
+          followers: []
+        })
+      }
+      tm.followers.push({
+        id: v.id,
+        name: v.name
+      })
+    })
+    return teams
   }
 }
+
+module.exports = Team

@@ -10,16 +10,15 @@ const TYPE = {
   'O': 0
 }
 
-module.exports.verifyPermission = perm => (req, res, next) => {
+module.exports.verifyPermission = (perm, redirect = true) => (req, res, next) => {
+  console.log(req.session.user)
   const user = req.user = req.session.user
-  if (!user) {
-    const redirect = req.originalUrl
-    return res.redirect(`/login?redirect=${redirect}`)
-  }
-  console.log(TYPE[user.userType], TYPE[perm])
-  if (!(TYPE[user.userType] >= TYPE[perm])) {
-    res.status(401)
-    return res.end()
+  if (!user || !(TYPE[user.userType] >= TYPE[perm])) {
+    if (redirect) {
+      const url = req.originalUrl
+      return res.redirect(`/login?redirect=${url}`)
+    }
+    return res.redirect('/404')
   }
   return next()
 }
