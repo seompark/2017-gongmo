@@ -1,12 +1,158 @@
-extends page
+extends layout
 
 append body
-    .columns
-        aside.column.menu.is-4
-            ul.menu-list
-                li.a 공지사항
-                li.a 신청 내역
-        .column.container
-            section.section
+    include navbar
+    .columns.is-marginless
+        .column.is-2
+            aside.menu#sticky-menu
+                p.menu-label General
+                ul.menu-list
+                    li: a 대쉬보드
+                    li: a 설정
+        .column#dashboard
+            .section
+                .content.container
+                    h1.is-size-1.has-text-weight-bold
+                        | Dashboard
+                    hr
+                    h2.has-text-weight-bold(id='신청_현황')
+                        | 신청 현황
+                        a.anchor-link(href='#신청_현황') #
+                    table.table.is-fullwidth
+                        tr
+                            th 최종 수정 날짜
+                            th 팀명
+                            th 팀장 이름
+                            th 팀장 학번
+                            th 신청서 다운로드
+                            th 상세보기
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+                        tr
+                            td 2017/9/18 20:34:54
+                            td 시공조
+                            td 박성민
+                            td 1410
+                            td: a.button 다운로드
+                            td: a.button 자세히
+
+
 append script
     script(src='/admin.bundle.js')

@@ -35,95 +35,102 @@ module.exports = app => {
   }
 
   app.route('/hassan')
-    .get((req, res) => {
-      if (!(req.query.secret === 'gkttksdlek')) return res.end('asdf')
-      req.session.user = {
-        id: '1269',
-        username: 'a1p4ca',
-        email: 'sm@murye.io',
-        name: '박성민',
-        userTypes: 'T'
-      }
-      res.redirect('/')
-    })
+  .get((req, res) => {
+    if (!(req.query.secret === 'gkttksdlek')) return res.end('asdf')
+    req.session.user = {
+      id: '1269',
+      username: 'a1p4ca',
+      email: 'sm@murye.io',
+      name: '박성민',
+      userType: 'T'
+    }
+    res.redirect('/')
+  })
 
   app.route('/')
-    .get((req, res) => {
-      res.render('index', {
-        user: req.session.user,
-        notices: bbsMock.notice
-      })
+  .get((req, res) => {
+    res.render('index', {
+      user: req.session.user,
+      notices: bbsMock.notice
     })
+  })
 
   app.use('/submit', auth.verifyPermission('S'))
   app.route('/submit')
-    .get((req, res) => {
-      res.render('submit', {
-        user: req.session.user
-      })
+  .get((req, res) => {
+    res.render('submit', {
+      user: req.session.user
     })
-    .post((req, res) => {
-      const body = req.body
-      if (!(req.body && req.body.leader)) return res.sendStatus(400)
-      const leader = {
-        name: req.session.user.name,
-        id: req.session.user.id
-      }
-      const { name, followers, description } = body
-      const team = new Team({
-        name,
-        leader,
-        followers,
-        description
-      })
-      team.save()
-        .then(() => {
-          res.json({
-            success: true
-          })
-        })
-        .catch(console.error)
+  })
+  .post((req, res) => {
+    const body = req.body
+    if (!(req.body && req.body.leader)) {
+      return res.json({ success: false, error: 'INVALID' })
+    }
+    const leader = {
+      name: req.user.name,
+      id: req.user.id
+    }
+    const { name, followers, description } = body
+    const team = new Team({
+      name,
+      leader,
+      followers,
+      description
     })
 
+    team.save()
+    .then(() => {
+      res.json({
+        success: true,
+        error: null
+      })
+    })
+    .catch(err => {
+      res.json({
+        success: false,
+        error: err.name
+      })
+    })
+  })
+
+  app.use('/download', auth.verifyPermission('S'))
   app.route('/download')
-    .get(
-      auth.verifyPermission('S'),
-      (req, res) => {
-        res.sendFile(path.resolve('../', 'contents/file/download.hwp'))
-      }
-    )
+  .get((req, res) => {
+    res.sendFile(path.resolve('../', 'contents/file/download.hwp'))
+  })
 
   app.route('/login')
-    .get((req, res) => {
-      if (req.session.user) {
-        return res.redirect(`/${req.query.redirect || ''}`)
-      }
-      req.session.redirectTo = req.query.redirect || '/'
-      res.render('login')
-    })
-    .post((req, res) => {
-      auth.identifyUser(req.body.id, req.body.password)
-        .then(result => {
-          if (!result) {
-            req.flash('error', '잘못된 아이디 혹은 비밀번호입니다.')
-            return res.redirect('/login')
-          }
-          req.session.user = result
-          res.redirect(req.session.redirectTo)
-        })
-        .catch(console.error)
-    })
+  .get((req, res) => {
+    if (req.session.user) {
+      return res.redirect(`/${req.query.redirect || ''}`)
+    }
+    req.session.redirectTo = req.query.redirect || '/'
+    res.render('login')
+  })
+  .post((req, res) => {
+    auth.identifyUser(req.body.id, req.body.password)
+      .then(result => {
+        if (!result) {
+          req.flash('error', '잘못된 아이디 혹은 비밀번호입니다.')
+          return res.redirect('/login')
+        }
+        req.session.user = result
+        res.redirect(req.session.redirectTo)
+      })
+      .catch(console.error)
+  })
 
   app.route('/logout')
-    .post((req, res) => {
-      req.session.user = null
-      res.redirect('/')
-    })
+  .post((req, res) => {
+    req.session.user = null
+    res.redirect('/')
+  })
 
   app.route('/bbs')
-    .get((req, res) => {
-      res.render('bbs', bbsMock)
-    })
+  .get((req, res) => {
+    res.render('bbs', bbsMock)
+  })
 
-  app.use('/admin', auth.verifyPermission('T', false), require('./admin'))
+  app.use('/admin'/* , auth.verifyPermission('T', false) */, require('./admin'))
 }

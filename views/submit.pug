@@ -6,21 +6,19 @@ append contents
             .field-label
                 label.label 팀명
             .field-body
-                .field
+                .field.is-narrow
                     .control
-                        input.input
+                        input.input.is-fullwidth
         .field.is-horizontal
             .field-label
                 label.label 팀장
             .field-body
                 .field
-                    .control.is-expanded
+                    .control
                         input.input(value='1410', disabled)
                 .field
-                    .control.is-expanded
+                    .control
                         input.input.is-disabled(value='박성민', disabled)
-                .field
-                    p.control.is-expanded
         .field.is-horizontal
             .field-label.is-normal
                 label.label 팀원
@@ -31,49 +29,10 @@ append contents
                 .field
                     p.control
                         input.input(placeholder='이름')
-                .field
-                    p.control
-                        button.button(type='button', style='width: 200px') -
         .field.is-horizontal
             .field-label
             .field-body
-                .field
-                    p.control
-                        input.input(placeholder='학번')
-                .field
-                    p.control
-                        input.input(placeholder='이름')
-                .field
-                    p.control
-                        button.button(type='button') -
-        .field.is-horizontal
-            .field-label
-            .field-body
-                .field
-                    p.control
-                        input.input(placeholder='학번')
-                .field
-                    p.control
-                        input.input(placeholder='이름')
-                .field
-                    p.control
-                        button.button(type='button') -
-        .field.is-horizontal
-            .field-label
-            .field-body
-                .field
-                    p.control
-                        input.input(placeholder='학번')
-                .field
-                    p.control
-                        input.input(placeholder='이름')
-                .field
-                    p.control
-                        button.button(type='button') -
-        .field.is-horizontal
-            .field-label
-            .field-body
-                button.button(type='button') +
+                button.button(type='button') 팀원 추가
 
 append script
     script(src='/submit.bundle.js')

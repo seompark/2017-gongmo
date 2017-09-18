@@ -1,0 +1,11 @@
+@import '../initialize';
+
+#sticky-menu {
+  padding: 15px 0 0 15px;
+}
+
+.anchor-link {
+  position: absolute;
+  right: calc(100% + 1rem);
+  color: $primary;
+}

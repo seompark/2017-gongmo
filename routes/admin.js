@@ -3,7 +3,7 @@ const router = new Router()
 
 router.route('/')
 .get((req, res) => {
-  res.render('admin', {user: req.user})
+  res.render('admin', { user: req.user || req.session.user })
 })
 
 router.route('/forms')
