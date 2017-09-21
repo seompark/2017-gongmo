@@ -1,4 +1,3 @@
 @import 'customize';
-@import 'pages/index';
-@import 'pages/login';
-@import 'pages/admin';
+@import './pages/_all';
+@import './components/_all';

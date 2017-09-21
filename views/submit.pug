@@ -1,38 +1,57 @@
 extends page
 
 append contents
-    .container.section
-        .field.is-horizontal
-            .field-label
-                label.label 팀명
-            .field-body
-                .field.is-narrow
-                    .control
-                        input.input.is-fullwidth
-        .field.is-horizontal
-            .field-label
-                label.label 팀장
-            .field-body
-                .field
-                    .control
-                        input.input(value='1410', disabled)
-                .field
-                    .control
-                        input.input.is-disabled(value='박성민', disabled)
-        .field.is-horizontal
-            .field-label.is-normal
-                label.label 팀원
-            .field-body
-                .field
-                    p.control
-                        input.input(placeholder='학번')
-                .field
-                    p.control
-                        input.input(placeholder='이름')
-        .field.is-horizontal
-            .field-label
-            .field-body
-                button.button(type='button') 팀원 추가
-
+    .container.slim.section
+        .field
+            label.label 팀명
+            .control
+                input.input
+        .field
+            label.label 팀장
+            .field.is-grouped
+                .control.is-expanded
+                    input.input(value='1410', disabled)
+                .control.is-expanded
+                    input.input.is-disabled(value='박성민', disabled)
+        .field
+            label.label 팀원
+            .field.is-grouped
+                .control.is-expanded
+                    input.input.is-expanded(placeholder='학번')
+                .control.is-expanded
+                    input.input(placeholder='이름')
+                .control
+                    button.button.is-danger.is-outlined(type='button') 삭제
+            .field.is-grouped
+                .control.is-expanded
+                    input.input(placeholder='학번')
+                .control.is-expanded
+                    input.input(placeholder='이름')
+                .control
+                    button.button.is-danger.is-outlined(type='button') 삭제
+            .field
+                .control
+                    button.button(type='button') 팀원 추가
+        .field
+            label.label 신청서
+            .control
+                .file.has-name
+                    label.file-label
+                        input.file-input#formfile(type='file', name='form_file')
+                        span.file-cta
+                            span.file-icon
+                                i.fa.fa-upload
+                            span.file-label
+                                | 파일 선택
+                        span.file-name= storedFormFile || ''
+        .field
+            label.label 메모
+            .control
+                textarea.textarea
+        .field.is-grouped.is-grouped-centered
+            .control
+                button.button.is-primary(type='button') 저장
+            .control
+                button.button.is-light(type='button') 취소
 append script
     script(src='/submit.bundle.js')

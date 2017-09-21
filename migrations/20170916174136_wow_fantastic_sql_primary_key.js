@@ -7,8 +7,9 @@ exports.up = async knex => {
 }
 
 exports.down = async knex => {
-  const team = await knex.schema.table('teams', table => {
-    table.dropColumn('name')
+  const follower = await knex.schema.alterTable('followers', table => {
+    table.dropPrimary('id')
+    table.primary('leader_id')
   })
-  return [team]
+  return [follower]
 }

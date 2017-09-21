@@ -3,7 +3,7 @@
 @import url(https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css);
 
 h1, h2, h3, h4, h5 {
-  font-family: 'Nanum Square';
+  font-family: 'Nanum Square','Segoe UI', sans-serif;
 }
 
 a {
@@ -12,4 +12,19 @@ a {
 
 .title {
   font-weight: 500 !important;
+}
+
+.container.slim {
+  @include from($desktop) {
+    max-width: $desktop - (3 * $gap);
+    width: $desktop - (3 * $gap);
+  }
+}
+
+.content table td, .content table th {
+  vertical-align: middle;
+}
+
+.table td, .table th {
+  vertical-align: middle;
 }
