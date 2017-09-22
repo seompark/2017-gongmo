@@ -18,26 +18,37 @@ class Team {
     this.description = description
   }
 
+  valueOf() {
+    return {
+      team: {
+        name: this.name,
+        leader_id: this.leader.id,
+        leader_name: this.leader.name,
+        description: this.description
+      },
+      followers: this.followers
+        .map(v => ({ leader_id: this.leader.id, id: v.id, name: v.name }))
+    }
+  }
+
   /**
    * DB에 저장
    * @returns {Promise}
    */
   async save () {
-    await follower.where({ leader_id: this.leader.id }).delete()
-    await team.where({ leader_id: this.leader.id }).delete()
-    await team.insert({
-      name: this.name,
-      leader_id: this.leader.id,
-      leader_name: this.leader.name,
-      description: this.description
-    })
-    for (const value of this.followers) {
-      await follower.insert({
-        leader_id: this.leader.id,
-        id: value.id,
-        name: value.name
-      })
+    const teamQuery = team.where({ leader_id: this.leader.id })
+    const followersQuery = follower.where({ leader_id: this.leader.id })
+    const value = this.valueOf()
+
+    await followersQuery.delete()
+
+    if (await teamQuery.select().length > 0) {
+      await teamQuery.update(value.team)
+      return
     }
+
+    await team.insert(value.team)
+    await follower.insert(value.followers)
   }
 
   /**
