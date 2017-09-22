@@ -1,8 +1,8 @@
 extends layout
 
 append body
-    section.hero.is-fullheight.is-primary.is-bold
-        .hero-body: .is-centered
+    .hero.is-fullheight.is-primary.is-bold
+        .hero-body(style='justify-content: center')
             .card
                 .card-content: form.form(method='post')
                     .field: .control.has-icons-left

@@ -1,6 +1,5 @@
 const path = require('path')
 const auth = require('../src/auth')
-const Team = require('../src/db/Team')
 
 module.exports = app => {
   const bbsMock = {
@@ -55,82 +54,14 @@ module.exports = app => {
     })
   })
 
-  app.use('/submit', auth.verifyPermission('S'))
-  app.route('/submit')
-  .get((req, res) => {
-    res.render('submit', {
-      user: req.session.user
-    })
-  })
-  .post((req, res) => {
-    const body = req.body
-    if (!(req.body && req.body.leader)) {
-      return res.json({ success: false, error: 'INVALID' })
-    }
-    const leader = {
-      name: req.user.name,
-      id: req.user.id
-    }
-    const { name, followers, description } = body
-    const team = new Team({
-      name,
-      leader,
-      followers,
-      description
-    })
-
-    team.save()
-    .then(() => {
-      res.json({
-        success: true,
-        error: null
-      })
-    })
-    .catch(err => {
-      res.json({
-        success: false,
-        error: err.name
-      })
-    })
-  })
-
   app.use('/download', auth.verifyPermission('S'))
   app.route('/download')
   .get((req, res) => {
     res.sendFile(path.resolve('../', 'contents/file/download.hwp'))
   })
 
-  app.route('/login')
-  .get((req, res) => {
-    if (req.session.user) {
-      return res.redirect(`/${req.query.redirect || ''}`)
-    }
-    req.session.redirectTo = req.query.redirect || '/'
-    res.render('login')
-  })
-  .post((req, res) => {
-    auth.identifyUser(req.body.id, req.body.password)
-      .then(result => {
-        if (!result) {
-          req.flash('error', '잘못된 아이디 혹은 비밀번호입니다.')
-          return res.redirect('/login')
-        }
-        req.session.user = result
-        res.redirect(req.session.redirectTo)
-      })
-      .catch(console.error)
-  })
-
-  app.route('/logout')
-  .post((req, res) => {
-    req.session.user = null
-    res.redirect('/')
-  })
-
-  app.route('/bbs')
-  .get((req, res) => {
-    res.render('bbs', bbsMock)
-  })
-
+  app.use('/login', require('./login'))
+  app.use('/logout', require('./logout'))
+  app.use('/submit', auth.verifyPermission('S'), require('./submit'))
   app.use('/admin'/* , auth.verifyPermission('T', false) */, require('./admin'))
 }

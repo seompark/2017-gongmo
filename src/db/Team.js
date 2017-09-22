@@ -8,17 +8,25 @@ class Team {
    * @property {Object} leader
    * @property {Array<Object>} followers
    * @property {string} description
+   * @property {string} fileHash
    *
    * @param {Team} team
    */
-  constructor ({leader, name = leader.name, followers = [], description = ''}) {
+  constructor ({
+    leader,
+    name = leader.name,
+    followers = [],
+    description = '',
+    fileHash
+  }) {
     this.name = name
     this.leader = leader
     this.followers = followers
     this.description = description
+    this.fileHash = fileHash
   }
 
-  valueOf() {
+  valueOf () {
     return {
       team: {
         name: this.name,
@@ -49,7 +57,7 @@ class Team {
 
     await team.insert(value.team)
     await follower.insert(value.followers)
-  }
+  };;
 
   /**
    * 팀장 학번으로 팀 정보를 가져온다.
