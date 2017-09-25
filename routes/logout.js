@@ -1,7 +1,7 @@
 const Router = require('express').Router
 const router = new Router()
 
-router.route('/logout')
+router.route('/')
 .post((req, res) => {
   req.session.user = null
   res.redirect('/')

@@ -10,12 +10,12 @@ router.route('/')
 })
 .post((req, res) => {
   const body = req.body
-  if (!(req.body && req.body.leader)) {
+  if (!body) {
     return res.json({ success: false, error: 'INVALID' })
   }
   const leader = {
     name: req.user.name,
-    id: req.user.id
+    id: req.user.serial
   }
   const { name, followers, description } = body
   const team = new Team({
@@ -35,7 +35,7 @@ router.route('/')
   .catch(err => {
     res.json({
       success: false,
-      error: err.name
+      error: err
     })
   })
 })
