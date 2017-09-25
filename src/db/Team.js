@@ -1,6 +1,4 @@
 const knex = require('./knex')
-const team = knex('teams')
-const follower = knex('followers')
 
 class Team {
   /**
@@ -44,20 +42,19 @@ class Team {
    * @returns {Promise}
    */
   async save () {
-    const teamQuery = team.where({ leader_id: this.leader.id })
-    const followersQuery = follower.where({ leader_id: this.leader.id })
+    const teamQuery = knex('teams').where({ leader_id: this.leader.id })
+    const followersQuery = knex('followers').where({ leader_id: this.leader.id })
     const value = this.valueOf()
 
     await followersQuery.delete()
-
-    if (await teamQuery.select().length > 0) {
+    if ((await teamQuery.select()).length > 0) {
       await teamQuery.update(value.team)
       return
     }
 
-    await team.insert(value.team)
-    await follower.insert(value.followers)
-  };;
+    await knex('teams').insert(value.team)
+    await knex('followers').insert(value.followers)
+  }
 
   /**
    * 팀장 학번으로 팀 정보를 가져온다.
@@ -65,8 +62,8 @@ class Team {
    * @returns {Promise.<Team>}
    */
   static async findByLeaderId (id) {
-    const followers = await follower.where({ leader_id: id }).select()
-    const tm = await team.where({ leader_id: id }).select()[0]
+    const followers = await knex('followers').where({ leader_id: id }).select()
+    const tm = await knex('teams').where({ leader_id: id }).select()[0]
     if (!tm) throw new Error('Team not found')
     return new Team({
       name: tm.name,
@@ -82,7 +79,7 @@ class Team {
    * @returns {Promise.<Object, Error>}
    */
   static async getList () {
-    const followers = await team.select(
+    const followers = await knex.select(
       'teams.name as team_name',
       'teams.leader_id',
       'teams.leader_name',
@@ -90,6 +87,7 @@ class Team {
       'followers.name',
       'followers.id'
     )
+    .from('teams')
     .innerJoin('followers', 'teams.leader_id', 'followers.leader_id')
 
     const teams = {}

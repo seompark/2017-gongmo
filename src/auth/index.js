@@ -11,7 +11,6 @@ const TYPE = {
 }
 
 module.exports.verifyPermission = (perm, redirect = true) => (req, res, next) => {
-  console.log(req.session.user)
   const user = req.user = req.session.user
   if (!user || !(TYPE[user.userType] >= TYPE[perm])) {
     if (redirect) {
@@ -27,6 +26,7 @@ module.exports.identifyUser = async (name, password) => {
   let result = false
   try {
     result = await dimi.identifyUser(name, password)
+    result.serial = (await dimi.getStudent(name)).serial
   } catch (err) { }
   return result
 }
