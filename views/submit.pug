@@ -1,11 +1,11 @@
 extends page
 
 append contents
-    .container.slim.section
+    .container.slim.section: form#form(method='post')
         .field
             label.label 팀명
             .control
-                input.input
+                input.input(name='teamName')
         .field
             label.label 팀장
             .field.is-grouped
@@ -13,45 +13,50 @@ append contents
                     input.input(value='1410', disabled)
                 .control.is-expanded
                     input.input.is-disabled(value='박성민', disabled)
-        .field
+        .field#followers
             label.label 팀원
-            .field.is-grouped
+            .field.is-grouped.follower
                 .control.is-expanded
                     input.input.is-expanded(placeholder='학번')
                 .control.is-expanded
                     input.input(placeholder='이름')
                 .control
-                    button.button.is-danger.is-outlined(type='button') 삭제
-            .field.is-grouped
+                    button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
+            .field.is-grouped.follower
                 .control.is-expanded
                     input.input(placeholder='학번')
                 .control.is-expanded
                     input.input(placeholder='이름')
                 .control
-                    button.button.is-danger.is-outlined(type='button') 삭제
+                    button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
             .field
                 .control
-                    button.button(type='button') 팀원 추가
+                    button.button#add-followers-btn(type='button') 팀원 추가
         .field
             label.label 신청서
-            .control
-                .file.has-name
-                    label.file-label
-                        input.file-input#formfile(type='file', name='form_file')
-                        span.file-cta
-                            span.file-icon
-                                i.fa.fa-upload
-                            span.file-label
-                                | 파일 선택
-                        span.file-name= storedFormFile || ''
+            .field.is-grouped
+                .control
+                    .file.has-name
+                        label.file-label
+                            input.file-input#formfile(type='file', name='form_file')
+                            span.file-cta
+                                span.file-icon
+                                    i.fa.fa-upload
+                                span.file-label
+                                    | 파일 선택
+                            span.file-name= storedFormFile || ''
+                .control
+                    button.button(type='button') 이전 제출 파일 다운로드
         .field
             label.label 메모
             .control
-                textarea.textarea
+                textarea.textarea(name='description')
+        .field.has-text-centered#message
+            p &nbsp;
         .field.is-grouped.is-grouped-centered
             .control
-                button.button.is-primary(type='button') 저장
+                button.button.is-primary#save-btn(type='submit') 저장
             .control
-                button.button.is-light(type='button') 취소
+                button.button.is-light#cancel-btn(type='button') 취소
 append script
     script(src='/submit.bundle.js')
