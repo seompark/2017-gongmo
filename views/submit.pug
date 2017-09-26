@@ -5,7 +5,7 @@ append contents
         .field
             label.label 팀명
             .control
-                input.input(name='teamName')
+                input.input(name='teamName', value=name)
         .field
             label.label 팀장
             .field.is-grouped
@@ -15,20 +15,24 @@ append contents
                     input.input.is-disabled(value='박성민', disabled)
         .field#followers
             label.label 팀원
-            .field.is-grouped.follower
-                .control.is-expanded
-                    input.input.is-expanded(placeholder='학번')
-                .control.is-expanded
-                    input.input(placeholder='이름')
-                .control
-                    button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
-            .field.is-grouped.follower
-                .control.is-expanded
-                    input.input(placeholder='학번')
-                .control.is-expanded
-                    input.input(placeholder='이름')
-                .control
-                    button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
+            if followers && followers.length > 0
+                each follower in followers
+                    .field.is-grouped.follower
+                        .control.is-expanded
+                            input.input.is-expanded(placeholder='학번', value=follower.id)
+                        .control.is-expanded
+                            input.input(placeholder='이름', value=follower.name)
+                        .control
+                            button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
+            else
+                each _ in [0, 1]
+                    .field.is-grouped.follower
+                        .control.is-expanded
+                            input.input(placeholder='학번')
+                        .control.is-expanded
+                            input.input(placeholder='이름')
+                        .control
+                            button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
             .field
                 .control
                     button.button#add-followers-btn(type='button') 팀원 추가
@@ -50,7 +54,7 @@ append contents
         .field
             label.label 메모
             .control
-                textarea.textarea(name='description')
+                textarea.textarea(name='description')= description
         .field.has-text-centered#message
             p &nbsp;
         .field.is-grouped.is-grouped-centered

@@ -15,7 +15,7 @@ class Team {
     name = leader.name,
     followers = [],
     description = '',
-    fileHash
+    fileHash = null
   }) {
     this.name = name
     this.leader = leader
@@ -33,7 +33,12 @@ class Team {
         description: this.description
       },
       followers: this.followers
-        .map(v => ({ leader_id: this.leader.id, id: v.id, name: v.name }))
+        .map(v => ({
+          leader_id: this.leader.id,
+          id: v.id,
+          name: v.name,
+          priority: v.priority
+        }))
     }
   }
 
@@ -42,18 +47,42 @@ class Team {
    * @returns {Promise}
    */
   async save () {
+    this.verifyData()
     const teamQuery = knex('teams').where({ leader_id: this.leader.id })
     const followersQuery = knex('followers').where({ leader_id: this.leader.id })
     const value = this.valueOf()
 
     await followersQuery.delete()
+    await knex('followers').insert(value.followers)
+    console.log('called', await teamQuery.select())
     if ((await teamQuery.select()).length > 0) {
+      console.log('called')
       await teamQuery.update(value.team)
       return
     }
 
     await knex('teams').insert(value.team)
-    await knex('followers').insert(value.followers)
+  }
+
+  verifyData () {
+    let err = null
+    if (!(this.followers instanceof Array)) err = TypeError(`Invalid type: followers should be Array but ${this.followers.constructor}.`)
+    if (this.name.constructor !== String) err = new TypeError(`Invalid type: name should be String but ${this.name.constructor}.`)
+    if (!this.leader) err = new Error('Invalid data: leader should be Object.')
+    if (this.leader.name.constructor !== String) err = new TypeError(`Invalid type: leader.name should be String but ${this.leader.name.constructor}.`)
+    if (isNaN(Number(this.leader.id))) err = new TypeError(`Invalid type: leader.id should be Number but ${this.leader.id.constructor}.`)
+    this.followers.forEach(v => {
+      if (v.name && v.id && v.priority) {
+        if (v.name.constructor !== String) err = new TypeError('Invalid type: follower.name which is in followers should be string.')
+        if (isNaN(Number(v.id))) err = new TypeError('Invalid type: follower.id which is in followers should be number.')
+        if (isNaN(Number(v.priority))) err = new Error('Invalid type: follower.priority which is in followers should be number.')
+        if (v.priority < 1 || v.priority > 3) err = new Error('Invalid data : follower.id which is in followers should be bigger than 0 and smaller than 5.')
+      } else {
+        err = new Error('Not allowed null or undefined data.')
+      }
+    })
+    console.log(err)
+    if (err) throw err
   }
 
   /**
@@ -63,7 +92,7 @@ class Team {
    */
   static async findByLeaderId (id) {
     const followers = await knex('followers').where({ leader_id: id }).select()
-    const tm = await knex('teams').where({ leader_id: id }).select()[0]
+    const tm = (await knex('teams').where({ leader_id: id }).select())[0]
     if (!tm) throw new Error('Team not found')
     return new Team({
       name: tm.name,
@@ -90,6 +119,7 @@ class Team {
     .from('teams')
     .innerJoin('followers', 'teams.leader_id', 'followers.leader_id')
 
+    // TODO Refactoring
     const teams = {}
     followers.forEach(v => {
       let tm = teams[v.team_name]
@@ -106,7 +136,8 @@ class Team {
       }
       tm.followers.push({
         id: v.id,
-        name: v.name
+        name: v.name,
+        priority: v.priority
       })
     })
     return teams

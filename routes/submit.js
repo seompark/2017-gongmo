@@ -4,8 +4,19 @@ const Team = require('../src/db/Team')
 
 router.route('/')
 .get((req, res) => {
-  res.render('submit', {
-    user: req.session.user
+  Team.findByLeaderId(req.user.serial).then(t => {
+    res.render('submit', {
+      user: req.session.user,
+      followers: t.followers,
+      name: t.name,
+      description: t.description
+    })
+  })
+  .catch(_ => {
+    console.log(_)
+    res.render('error', {
+      message: 'Database Error'
+    })
   })
 })
 .post((req, res) => {

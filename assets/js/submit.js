@@ -15,10 +15,17 @@ function main () {
   const clonedFollower = $$('.follower')[0].cloneNode(true)
   const followersField = $('#followers')
 
-  const updateFile = () => {
+  function updateFile () {
     if (fileInput.files.length > 0) {
       fileName.innerHTML = fileInput.files[0].name
     }
+  }
+
+  function cloneFollower () {
+    const follower = clonedFollower.cloneNode(true)
+    console.log(follower)
+    ;[0, 1].forEach(v => (follower.childNodes[v].childNodes[0].value = ''))
+    return follower
   }
 
   function removeFollower () {
@@ -31,7 +38,7 @@ function main () {
     // children 이 3 + 1(label) 개 이상이면 수상 제외 알림.
     if (followersField.children.length >= 4) window.alert('3번째 팀원부터는 수상에서 제외됩니다.')
 
-    const flw = clonedFollower.cloneNode(true)
+    const flw = cloneFollower()
     followersField.insertBefore(flw, addBtn.parentElement.parentElement)
     flw.children[2].children[0].addEventListener('click', removeFollower)
   }
@@ -44,18 +51,25 @@ function main () {
       name: $('input[name="teamName"]').value || undefined,
       description: $('textarea[name="description"]').value,
       followers: [...$$('.follower')]
-        .map(v => ({
-          id: v.childNodes[0].childNodes[0].value,
-          name: v.childNodes[1].childNodes[0].value
+        .map((v, i) => ({
+          id: Number(v.childNodes[0].childNodes[0].value),
+          name: v.childNodes[1].childNodes[0].value,
+          priority: i + 1
         }))
         .filter(v => v.id && v.name)
-    }).then(r => {
-      saveBtn.className = saveBtn.className.replace(' is-loading', '')
-      $('#message').innerHTML = `<p class="has-text-grey">${moment().format('hh시 mm분 ss초')} : 저장되었습니다.</p>`
-      const {data} = r
-      console.log(data)
     })
-      .catch(() => {})
+    .then(r => {
+      saveBtn.className = saveBtn.className.replace(' is-loading', '')
+      if (r.data.success) {
+        $('#message').innerHTML = `<p class="has-text-grey">${moment().format('hh시 mm분 ss초')} : 저장되었습니다.</p>`
+      } else {
+        $('#message').innerHTML = `<p class="has-text-danger">저장에 실패했습니다.</p>`
+      }
+      console.log(r.data)
+    })
+    .catch(() => {
+      $('#message').innerHTML = `<p class="has-text-danger">저장에 실패했습니다.</p>`
+    })
   }
 
   function cancel () {
@@ -63,7 +77,7 @@ function main () {
   }
 
   form.onsubmit = submit
-  form.onkeydown = e => (e.ctrlKey && e.keyCode === 13 && !!submit())
+  form.onkeydown = e => (e.ctrlKey && e.keyCode === 13 && !!submit()) || e.keyCode !== 13
   fileInput.addEventListener('change', updateFile)
   addBtn.addEventListener('click', addFollower)
   rmvBtns.forEach(v => v.addEventListener('click', removeFollower))
