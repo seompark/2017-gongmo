@@ -15,7 +15,7 @@ function main () {
   const clonedFollower = $$('.follower')[0].cloneNode(true)
   const followersField = $('#followers')
 
-  function updateFile () {
+  function updateFileName () {
     if (fileInput.files.length > 0) {
       fileName.innerHTML = fileInput.files[0].name
     }
@@ -47,17 +47,26 @@ function main () {
     e && e.preventDefault()
 
     saveBtn.className += ' is-loading'
-    axios.post('/submit', {
-      name: $('input[name="teamName"]').value || undefined,
-      description: $('textarea[name="description"]').value,
-      followers: [...$$('.follower')]
+
+    const formData = new window.FormData()
+
+    formData.append('name', $('input[name="teamName"]').value || undefined)
+    formData.append('description', $('textarea[name="description"]').value)
+    formData.append(
+      'followers',
+      JSON.stringify(
+        [...$$('.follower')]
         .map((v, i) => ({
           id: Number(v.childNodes[0].childNodes[0].value),
           name: v.childNodes[1].childNodes[0].value,
           priority: i + 1
         }))
         .filter(v => v.id && v.name)
-    })
+      )
+    )
+    formData.append('formfile', fileInput.files[0])
+
+    axios.post('/submit', formData)
     .then(r => {
       saveBtn.className = saveBtn.className.replace(' is-loading', '')
       if (r.data.success) {
@@ -68,6 +77,7 @@ function main () {
       console.log(r.data)
     })
     .catch(() => {
+      saveBtn.className = saveBtn.className.replace(' is-loading', '')
       $('#message').innerHTML = `<p class="has-text-danger">저장에 실패했습니다.</p>`
     })
   }
@@ -78,7 +88,7 @@ function main () {
 
   form.onsubmit = submit
   form.onkeydown = e => (e.ctrlKey && e.keyCode === 13 && !!submit()) || e.keyCode !== 13
-  fileInput.addEventListener('change', updateFile)
+  fileInput.addEventListener('change', updateFileName)
   addBtn.addEventListener('click', addFollower)
   rmvBtns.forEach(v => v.addEventListener('click', removeFollower))
   cancelBtn.addEventListener('click', cancel)

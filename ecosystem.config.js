@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'gongmo',
       watch: true,
-      ignore_watch: ['node_modules', 'views', 'assets', 'dist', '.idea', '.git'],
+      ignore_watch: ['node_modules', 'views', 'assets', 'dist', 'contents', '.idea', '.git'],
       script: 'index.js',
       env: {
         NODE_ENV: 'development'

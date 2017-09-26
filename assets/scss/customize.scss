@@ -16,8 +16,8 @@ a {
 
 .container.slim {
   @include from($desktop) {
-    max-width: $desktop - (3 * $gap);
-    width: $desktop - (3 * $gap);
+    max-width: $desktop - (4 * $gap);
+    width: $desktop - (4 * $gap);
   }
 }
 

@@ -15,13 +15,13 @@ class Team {
     name = leader.name,
     followers = [],
     description = '',
-    fileHash = null
+    file = null
   }) {
     this.name = name
     this.leader = leader
     this.followers = followers
     this.description = description
-    this.fileHash = fileHash
+    this.file = file
   }
 
   valueOf () {
@@ -30,7 +30,9 @@ class Team {
         name: this.name,
         leader_id: this.leader.id,
         leader_name: this.leader.name,
-        description: this.description
+        description: this.description,
+        original_file_name: this.file.originalName,
+        file_hash: this.file.name
       },
       followers: this.followers
         .map(v => ({

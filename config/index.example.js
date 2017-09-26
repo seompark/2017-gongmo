@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   secret: 'I\'m SECRET!!',
   port: 8080,
@@ -12,5 +14,6 @@ module.exports = {
     username: '',
     password: '',
     database: ''
-  }
+  },
+  formPath: path.resolve(__dirname, '..', 'contents/forms')
 }
