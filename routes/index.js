@@ -34,31 +34,31 @@ module.exports = app => {
   }
 
   app.route('/hassan')
-  .get((req, res) => {
-    if (!(req.query.secret === 'gkttksdlek')) return res.end('asdf')
-    req.session.user = {
-      id: '1269',
-      username: 'a1p4ca',
-      email: 'sm@murye.io',
-      name: '박성민',
-      userType: 'T'
-    }
-    res.redirect('/')
-  })
+    .get((req, res) => {
+      if (!(req.query.secret === 'gkttksdlek')) return res.end('asdf')
+      req.session.user = {
+        id: '1269',
+        username: 'a1p4ca',
+        email: 'sm@murye.io',
+        name: '박성민',
+        userType: 'T'
+      }
+      res.redirect('/')
+    })
 
   app.route('/')
-  .get((req, res) => {
-    res.render('index', {
-      user: req.session.user,
-      notices: bbsMock.notice
+    .get((req, res) => {
+      res.render('index', {
+        user: req.session.user,
+        notices: bbsMock.notice
+      })
     })
-  })
 
   app.use('/download', auth.verifyPermission('S'))
   app.route('/download')
-  .get((req, res) => {
-    res.sendFile(path.resolve('../', 'contents/file/download.hwp'))
-  })
+    .get((req, res) => {
+      res.sendFile(path.resolve('../', 'contents/file/download.hwp'))
+    })
 
   app.use('/login', require('./login'))
   app.use('/logout', require('./logout'))

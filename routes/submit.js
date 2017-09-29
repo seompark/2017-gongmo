@@ -17,59 +17,60 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 router.route('/')
-.get((req, res) => {
-  Team.findByLeaderId(req.user.serial).then(t => {
-    res.render('submit', {
-      user: req.session.user,
-      followers: t.followers,
-      name: t.name,
-      description: t.description
-    })
+  .get((req, res) => {
+    Team.findByLeaderId(req.user.serial)
+      .then(t => {
+        res.render('submit', {
+          user: req.session.user,
+          followers: t.followers,
+          name: t.name,
+          description: t.description
+        })
+      })
+      .catch(_ => {
+        console.error(_)
+        res.render('error', {
+          message: 'Database Error'
+        })
+      })
   })
-  .catch(_ => {
-    console.error(_)
-    res.render('error', {
-      message: 'Database Error'
-    })
-  })
-})
-.post(upload.single('formfile'), (req, res) => {
-  const body = req.body
-  if (!body) {
-    return res.json({ success: false, error: 'INVALID' })
-  }
-
-  const leader = {
-    name: req.user.name,
-    id: req.user.serial
-  }
-  const { name, followers, description } = body
-
-  const team = new Team({
-    name,
-    leader,
-    followers: JSON.parse(followers),
-    description,
-    file: {
-      name: req.file.filename,
-      originalName: req.file.originalname
+  .post(upload.single('formfile'), (req, res) => {
+    const body = req.body
+    if (!body) {
+      return res.json({ success: false, error: 'INVALID' })
     }
-  })
 
-  team.save()
-  .then(() => {
-    res.json({
-      success: true,
-      error: null
+    const leader = {
+      name: req.user.name,
+      id: req.user.serial
+    }
+    const { name, followers, description } = body
+
+    const team = new Team({
+      name,
+      leader,
+      followers: JSON.parse(followers),
+      description,
+      file: {
+        name: req.file.filename,
+        originalName: req.file.originalname
+      }
     })
+
+    team.save()
+      .then(() => {
+        res.json({
+          success: true,
+          error: null
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        res.json({
+          success: false,
+          error: err
+        })
+      })
   })
-  .catch(err => {
-    console.error(err)
-    res.json({
-      success: false,
-      error: err
-    })
-  })
-})
 
 module.exports = router

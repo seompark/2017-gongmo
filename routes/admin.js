@@ -3,17 +3,17 @@ const router = new Router()
 const Team = require('../src/db/Team')
 
 router.route('/')
-.get((req, res) => {
-  Team.getList().then(r => {
-    res.render('admin', {
-      teams: r,
-      user: req.user
+  .get((req, res) => {
+    Team.getList().then(r => {
+      res.render('admin', {
+        teams: r,
+        user: req.user
+      })
+    }).catch(_ => {
+      res.status(400)
+      res.end()
     })
-  }).catch(_ => {
-    res.status(400)
-    res.end()
   })
-})
 
 router.route('/settings')
   .get((req, res) => {

@@ -6,8 +6,10 @@ const $$ = document.querySelectorAll.bind(document)
 
 function main () {
   const form = $('#form')
-  const fileInput = $('#formfile')
-  const fileName = $('.file-name')
+  const formFile = $('#formfile')
+  const sourceFile = $('#sourcefile')
+  const formFileName = $('#formfile-name')
+  const sourceFileName = $('#sourcefile-name')
   const addBtn = $('#add-followers-btn')
   const rmvBtns = $$('.remove-btn')
   const saveBtn = $('#save-btn')
@@ -15,9 +17,11 @@ function main () {
   const clonedFollower = $$('.follower')[0].cloneNode(true)
   const followersField = $('#followers')
 
-  function updateFileName () {
-    if (fileInput.files.length > 0) {
-      fileName.innerHTML = fileInput.files[0].name
+  function updateFileName (el) {
+    return e => {
+      if (e.target.files.length > 0) {
+        el.innerHTML = e.target.files[0].name
+      }
     }
   }
 
@@ -64,22 +68,28 @@ function main () {
         .filter(v => v.id && v.name)
       )
     )
-    formData.append('formfile', fileInput.files[0])
+    formData.append('formfile', formFile.files[0])
+    formData.append('sourcefile', sourceFile.files[0])
 
-    axios.post('/submit', formData)
-    .then(r => {
-      saveBtn.className = saveBtn.className.replace(' is-loading', '')
-      if (r.data.success) {
-        $('#message').innerHTML = `<p class="has-text-grey">${moment().format('hh시 mm분 ss초')} : 저장되었습니다.</p>`
+    const toggleLoading = btn => {
+      if (btn.className.includes('is-loading')) {
+        btn.className.replace(' is-loading', '')
       } else {
-        $('#message').innerHTML = `<p class="has-text-danger">저장에 실패했습니다.</p>`
+        btn.className += ' is-loading'
       }
-      console.log(r.data)
-    })
-    .catch(() => {
-      saveBtn.className = saveBtn.className.replace(' is-loading', '')
-      $('#message').innerHTML = `<p class="has-text-danger">저장에 실패했습니다.</p>`
-    })
+    }
+
+    const handleResult = isSuccess => {
+      const success = `<p class="has-text-grey">${moment().format('hh시 mm분 ss초')} : 저장되었습니다.</p>`
+      const fail = `<p class="has-text-danger">저장에 실패했습니다.</p>`
+      $('#message').innerHTML = isSuccess ? success : fail
+    }
+
+    toggleLoading(saveBtn)
+    axios.post('/submit', formData)
+      .catch(() => handleResult(false))
+      .then(r => handleResult(r.data.success))
+      .then(() => toggleLoading(saveBtn))
   }
 
   function cancel () {
@@ -88,7 +98,8 @@ function main () {
 
   form.onsubmit = submit
   form.onkeydown = e => (e.ctrlKey && e.keyCode === 13 && !!submit()) || e.keyCode !== 13
-  fileInput.addEventListener('change', updateFileName)
+  formFile.addEventListener('change', updateFileName(formFileName))
+  sourceFile.addEventListener('change', updateFileName(sourceFileName))
   addBtn.addEventListener('click', addFollower)
   rmvBtns.forEach(v => v.addEventListener('click', removeFollower))
   cancelBtn.addEventListener('click', cancel)

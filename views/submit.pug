@@ -48,7 +48,22 @@ append contents
                                     i.fa.fa-upload
                                 span.file-label
                                     | 파일 선택
-                            span.file-name= storedFormFile || ''
+                            span.file-name#formfile-name
+                .control
+                    button.button(type='button') 이전 제출 파일 다운로드
+        .field
+            label.label 소스코드 제출
+            .field.is-grouped
+                .control
+                    .file.has-name
+                        label.file-label
+                            input.file-input#sourcefile(type='file', name='source_file')
+                            span.file-cta
+                                span.file-icon
+                                    i.fa.fa-upload
+                                span.file-label
+                                    | 파일 선택
+                            span.file-name#sourcefile-name
                 .control
                     button.button(type='button') 이전 제출 파일 다운로드
         .field

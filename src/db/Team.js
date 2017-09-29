@@ -6,7 +6,7 @@ class Team {
    * @property {Object} leader
    * @property {Array<Object>} followers
    * @property {string} description
-   * @property {string} fileHash
+   * @property {{originalName: string, hash: string}} file
    *
    * @param {Team} team
    */
@@ -15,13 +15,11 @@ class Team {
     name = leader.name,
     followers = [],
     description = '',
-    file = null
   }) {
     this.name = name
     this.leader = leader
     this.followers = followers
     this.description = description
-    this.file = file
   }
 
   valueOf () {
@@ -30,9 +28,7 @@ class Team {
         name: this.name,
         leader_id: this.leader.id,
         leader_name: this.leader.name,
-        description: this.description,
-        original_file_name: this.file.originalName,
-        file_hash: this.file.name
+        description: this.description
       },
       followers: this.followers
         .map(v => ({
@@ -83,7 +79,6 @@ class Team {
         err = new Error('Not allowed null or undefined data.')
       }
     })
-    console.log(err)
     if (err) throw err
   }
 
