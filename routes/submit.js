@@ -1,30 +1,40 @@
 const Router = require('express').Router
 const multer = require('multer')
-const hash = require('../src/utils/hash')
+const crypto = require('crypto')
 const config = require('../config')
 const router = new Router()
 const Team = require('../src/db/Team')
-
+const File = require('../src/db/File')
+const path = require('path')
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, config.formPath)
+    callback(null, path.resolve(config.content, 'files'))
   },
   filename: (req, file, callback) => {
-    callback(null, hash(req.user.id + Date.now()))
+    callback(null,
+      crypto.createHmac('sha256', Math.random().toString())
+        .update(Date.now().toString())
+        .digest('hex') + path.extname(file.originalname))
   }
 })
 
 const upload = multer({ storage })
+const fileupload = upload.fields([{ name: 'formfile', maxCount: 1 }, { name: 'sourcefile', maxCount: 1 }])
 
 router.route('/')
   .get((req, res) => {
-    Team.findByLeaderId(req.user.serial)
-      .then(t => {
+    Promise.all([
+      Team.findByLeaderId(req.user.serial),
+      File.findByLeaderId(req.user.serial)
+    ])
+      .then(result => {
         res.render('submit', {
           user: req.session.user,
-          followers: t.followers,
-          name: t.name,
-          description: t.description
+          followers: result[0].followers,
+          name: result[0].name,
+          description: result[0].description,
+          formfile: result[1].form,
+          sourcefile: result[1].source
         })
       })
       .catch(_ => {
@@ -34,10 +44,10 @@ router.route('/')
         })
       })
   })
-  .post(upload.single('formfile'), (req, res) => {
+  .post(fileupload, (req, res) => {
     const body = req.body
     if (!body) {
-      return res.json({ success: false, error: 'INVALID' })
+      return res.json({ success: false, error: 'No data recieved' })
     }
 
     const leader = {
@@ -46,18 +56,29 @@ router.route('/')
     }
     const { name, followers, description } = body
 
-    const team = new Team({
+    const promises = []
+
+    const pendingFileSave = (s, type) => {
+      if (!req.files[s]) return
+      const file = req.files[s][0]
+      promises.push(new File({
+        type,
+        hash: file.filename,
+        originalName: file.originalname,
+        leaderId: req.user.serial
+      }).save())
+    }
+
+    promises.push(new Team({
       name,
       leader,
       followers: JSON.parse(followers),
-      description,
-      file: {
-        name: req.file.filename,
-        originalName: req.file.originalname
-      }
-    })
+      description
+    }).save())
+    pendingFileSave('formfile', File.TYPE.FORM_FILE)
+    pendingFileSave('sourcefile', File.TYPE.SOURCE_FILE)
 
-    team.save()
+    Promise.all(promises)
       .then(() => {
         res.json({
           success: true,
