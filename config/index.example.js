@@ -15,5 +15,5 @@ module.exports = {
     password: '',
     database: ''
   },
-  formPath: path.resolve(__dirname, '..', 'contents/forms')
+  content: path.resolve(__dirname, '..', 'content/files')
 }
