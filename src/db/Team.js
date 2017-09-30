@@ -14,7 +14,7 @@ class Team {
     leader,
     name = leader.name,
     followers = [],
-    description = '',
+    description = ''
   }) {
     this.name = name
     this.leader = leader
@@ -52,14 +52,17 @@ class Team {
 
     await followersQuery.delete()
     await knex('followers').insert(value.followers)
-    console.log('called', await teamQuery.select())
     if ((await teamQuery.select()).length > 0) {
-      console.log('called')
       await teamQuery.update(value.team)
       return
     }
 
     await knex('teams').insert(value.team)
+  }
+
+  async delete () {
+    const query = await knex('teams').where({ leader_id: this.leader.id })
+    await query.delete()
   }
 
   verifyData () {
@@ -113,8 +116,8 @@ class Team {
       'followers.name',
       'followers.id'
     )
-    .from('teams')
-    .innerJoin('followers', 'teams.leader_id', 'followers.leader_id')
+      .from('teams')
+      .innerJoin('followers', 'teams.leader_id', 'followers.leader_id')
 
     // TODO Refactoring
     const teams = {}

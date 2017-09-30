@@ -60,24 +60,16 @@ function main () {
       'followers',
       JSON.stringify(
         [...$$('.follower')]
-        .map((v, i) => ({
-          id: Number(v.childNodes[0].childNodes[0].value),
-          name: v.childNodes[1].childNodes[0].value,
-          priority: i + 1
-        }))
-        .filter(v => v.id && v.name)
+          .map((v, i) => ({
+            id: Number(v.childNodes[0].childNodes[0].value),
+            name: v.childNodes[1].childNodes[0].value,
+            priority: i + 1
+          }))
+          .filter(v => v.id && v.name)
       )
     )
     formData.append('formfile', formFile.files[0])
     formData.append('sourcefile', sourceFile.files[0])
-
-    const toggleLoading = btn => {
-      if (btn.className.includes('is-loading')) {
-        btn.className.replace(' is-loading', '')
-      } else {
-        btn.className += ' is-loading'
-      }
-    }
 
     const handleResult = isSuccess => {
       const success = `<p class="has-text-grey">${moment().format('hh시 mm분 ss초')} : 저장되었습니다.</p>`
@@ -85,11 +77,11 @@ function main () {
       $('#message').innerHTML = isSuccess ? success : fail
     }
 
-    toggleLoading(saveBtn)
+    saveBtn.classList.add('is-loading')
     axios.post('/submit', formData)
       .catch(() => handleResult(false))
       .then(r => handleResult(r.data.success))
-      .then(() => toggleLoading(saveBtn))
+      .then(() => saveBtn.classList.remove('is-loading'))
   }
 
   function cancel () {
