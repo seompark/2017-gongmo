@@ -24,6 +24,20 @@ export default {
         use: 'babel-loader'
       },
       {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                minimize: true
+              }
+            }
+          ]
+        })
+      },
+      {
         test: /\.s[a|c]ss$/,
         use: ExtractTextPlugin.extract({
           use: [

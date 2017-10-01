@@ -1,3 +1,3 @@
 import stickybits from 'stickybits'
 
-stickybits('#sticky-menu')
+stickybits('#sticky-menu', { stickyBitStickyOffset: 52 })

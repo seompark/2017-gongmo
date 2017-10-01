@@ -1,5 +1,5 @@
 .title {
-  font-weight: 600;
+  font-weight: 700 !important;
   @include mobile {
     font-size: 9vw;
   }
@@ -28,7 +28,14 @@
 }
 
 #main-hero {
-  background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5)), url(https://media.gcflearnfree.org/content/5588514bf07fac61f8440cf9_06_22_2015/keyboardandmouse_handsonkeyboard.png) center / cover;
+  position: fixed;
+  width: 100vw;
+  background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)); //, url(https://media.gcflearnfree.org/content/5588514bf07fac61f8440cf9_06_22_2015/keyboardandmouse_handsonkeyboard.png) center / cover;
+}
+
+#main-hero .hero-body {
+  padding-bottom: 9rem;
+  padding-top: 9rem;
 }
 
 #submit-link-btn {
@@ -48,7 +55,10 @@
 }
 
 #notice {
+  position: relative;
+  z-index: 100;
   background: $white-bis;
+  top: 9rem + 9rem + 20rem;
 }
 
 .notice-card {

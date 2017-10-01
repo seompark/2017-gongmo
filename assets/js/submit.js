@@ -93,7 +93,7 @@ function main () {
   formFile.addEventListener('change', updateFileName(formFileName))
   sourceFile.addEventListener('change', updateFileName(sourceFileName))
   addBtn.addEventListener('click', addFollower)
-  rmvBtns.forEach(v => v.addEventListener('click', removeFollower))
+  rmvBtns.forEach(function (v) { v.addEventListener('click', removeFollower) })
   cancelBtn.addEventListener('click', cancel)
 }
 

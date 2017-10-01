@@ -1,9 +1,8 @@
 @import 'initialize';
 @import '~bulma/bulma';
-@import url(https://cdn.rawgit.com/moonspam/NanumSquare/master/nanumsquare.css);
 
-h1, h2, h3, h4, h5 {
-  font-family: 'Nanum Square','Segoe UI', sans-serif;
+body {
+  font-family: 'Noto Sans Korean', 'Segoe UI', sans-serif;
 }
 
 a {
