@@ -75,6 +75,7 @@ router.route('/')
       followers: JSON.parse(followers),
       description
     }).save())
+    promises.push(File.deleteLatest(req.user.serial))
     pendingFileSave('formfile', File.TYPE.FORM_FILE)
     pendingFileSave('sourcefile', File.TYPE.SOURCE_FILE)
 

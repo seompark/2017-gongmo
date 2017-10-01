@@ -1,4 +1,10 @@
 const knex = require('./knex')
+const { promisify } = require('util')
+const fs = require('fs')
+const path = require('path')
+const unlink = promisify(fs.unlink)
+
+const config = require('../../config')
 
 class File {
   /**
@@ -39,19 +45,40 @@ class File {
     await knex('files').insert(this.valueOf())
   }
 
+  /**
+   *
+   * @param leaderId
+   * @returns {Promise.<Object.<string, File>>}
+   */
   static async findByLeaderId (leaderId) {
     const result = await knex('files').select().where({ leader_id: leaderId })
     return result.reduce((pv, cv) => {
-      pv[cv.type] = {
+      pv[cv.type] = new File({
+        type: cv.type,
+        leaderId: cv.leader_id,
         originalName: cv.original_name,
         hash: cv.hash
-      }
+      })
       return pv
     }, {})
   }
 
-  async delete () {
+  static async deleteLatest (leaderId) {
+    const files = await File.findByLeaderId(leaderId)
+    for (const file of Object.values(files)) {
+      try {
+        await file.delete()
+      } catch (err) {
+        throw new Error(err)
+      }
+    }
+  }
 
+  async delete () {
+    try {
+      await knex('files').where({ hash: this.hash }).delete()
+      await unlink(path.resolve(config.content, 'files', this.hash))
+    } catch (err) { console.error(err) }
   }
 }
 
