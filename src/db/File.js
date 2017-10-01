@@ -78,7 +78,7 @@ class File {
     try {
       await knex('files').where({ hash: this.hash }).delete()
       await unlink(path.resolve(config.content, 'files', this.hash))
-    } catch (err) { throw new Error(`Failed to delete file : `) }
+    } catch (err) { throw new Error(`Failed to delete file : ${this.hash}`) }
   }
 }
 
