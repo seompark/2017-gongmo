@@ -79,7 +79,7 @@ function main () {
 
     saveBtn.classList.add('is-loading')
     axios.post('/submit', formData)
-      .catch(() => handleResult(false))
+      .catch(() => handleResult(false) && saveBtn.classList.remove('is-loading'))
       .then(r => handleResult(r.data.success))
       .then(() => saveBtn.classList.remove('is-loading'))
   }
