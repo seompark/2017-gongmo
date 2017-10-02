@@ -7,10 +7,10 @@ const Team = require('../src/db/Team')
 const File = require('../src/db/File')
 const path = require('path')
 const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
+  destination (req, file, callback) {
     callback(null, path.resolve(config.content, 'files'))
   },
-  filename: (req, file, callback) => {
+  filename (req, file, callback) {
     callback(null,
       crypto.createHmac('sha256', Math.random().toString())
         .update(Date.now().toString())
@@ -28,8 +28,11 @@ router.route('/')
       File.findByLeaderId(req.user.serial)
     ])
       .then(result => {
+        if (!result[0]) {
+          return res.render('submit', { user: req.user })
+        }
         res.render('submit', {
-          user: req.session.user,
+          user: req.user,
           followers: result[0].followers,
           name: result[0].name,
           description: result[0].description,

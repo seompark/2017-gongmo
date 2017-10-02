@@ -54,7 +54,7 @@ function main () {
 
     const formData = new window.FormData()
 
-    formData.append('name', $('input[name="teamName"]').value || undefined)
+    formData.append('name', $('input[name="teamName"]').value || $(`input[value="leaderName"]`))
     formData.append('description', $('textarea[name="description"]').value)
     formData.append(
       'followers',

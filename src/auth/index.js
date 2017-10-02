@@ -10,9 +10,13 @@ const TYPE = {
   'O': 0
 }
 
+exports.hasPermission = (experiment, control) => {
+  return TYPE[experiment] >= TYPE[control]
+}
+
 module.exports.verifyPermission = (perm, redirect = true) => (req, res, next) => {
   const user = req.user = req.session.user
-  if (!user || !(TYPE[user.userType] >= TYPE[perm])) {
+  if (!user || !exports.hasPermission(user.userType, perm)) {
     if (redirect) {
       const url = req.originalUrl
       return res.redirect(`/login?redirect=${url}`)

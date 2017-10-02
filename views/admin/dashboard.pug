@@ -1,0 +1,51 @@
+extends ../layout
+
+append body
+    include ../navbar
+    .columns.is-marginless
+        .column.is-2
+            aside.menu#sticky-menu
+                p.menu-label General
+                ul.menu-list
+                    li: a.is-active 대쉬보드
+                    li: a(href='/admin/notice') 공지사항
+                    li: a(href='/admin/settings') 설정
+        .column#dashboard
+            .section
+                .content.container
+                    h1.is-size-1.has-text-weight-bold
+                        | 대쉬보드
+                    hr
+                    h2.has-text-weight-bold(id='신청_현황')
+                        | 신청 현황
+                        a.anchor-link(href='#신청_현황') #
+
+                    table.table.is-fullwidth
+                        tr
+                            th 최종 수정 날짜
+                            th 팀명
+                            th 팀장 이름
+                            th 팀장 학번
+                            th 신청서 다운로드
+                            th 소스파일 다운로드
+                            th 팀원
+                        each team in teams
+                            tr
+                                td= team.updatedAt
+                                td= team.name
+                                td= team.leader.name
+                                td= team.leader.id
+                                td: a.button(href=`/download/form/${team.leader.id}`) 다운로드
+                                td: a.button(href=`/download/source/${team.leader.id}`) 다운로드
+                                td: table
+                                    if team.followers.length > 0
+                                        tr
+                                            th 학번
+                                            th 이름
+                                    each follower in team.followers
+                                        tr
+                                            td= follower.id
+                                            td= follower.name
+
+append script
+    script(src='/admin.bundle.js')

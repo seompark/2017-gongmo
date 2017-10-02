@@ -126,7 +126,7 @@ class Team {
                 name: cv.leader_name
               },
               description: cv.description,
-              updatedAt: cv.updated_at,
+              updatedAt: moment(cv.updated_at).format('MM월 DD일 hh시 mm분'),
               followers
             })
           })

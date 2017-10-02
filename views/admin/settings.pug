@@ -1,0 +1,15 @@
+extends ../layout
+
+append body
+    include ../navbar
+    .columns.is-marginless
+        .column.is-2
+            aside.menu#sticky-menu
+                p.menu-label General
+                ul.menu-list
+                    li: a 대쉬보드
+                    li: a 공지사항
+                    li: a.is-active 설정
+
+append script
+    script(src='/admin.bundle.js')
