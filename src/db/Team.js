@@ -1,4 +1,5 @@
 const knex = require('./knex')
+const moment = require('moment')
 
 class Team {
   /**
@@ -12,11 +13,11 @@ class Team {
    */
   constructor ({
     leader,
-    name = leader.name,
+    name,
     followers = [],
     description = ''
   }) {
-    this.name = name
+    this.name = name || leader.name
     this.leader = leader
     this.followers = followers
     this.description = description
@@ -61,8 +62,10 @@ class Team {
   }
 
   async delete () {
-    const query = await knex('teams').where({ leader_id: this.leader.id })
-    await query.delete()
+    const teamQuery = knex('teams').where({ leader_id: this.leader.id })
+    const followersQuery = knex('followers').where({ leader_id: this.leader.id })
+    await followersQuery.delete()
+    await teamQuery.delete()
   }
 
   verifyData () {
@@ -93,10 +96,10 @@ class Team {
   static async findByLeaderId (id) {
     const followers = await knex('followers').where({ leader_id: id }).select()
     const tm = (await knex('teams').where({ leader_id: id }).select())[0]
-    if (!tm) throw new Error('Team not found')
+    if (!tm) return null
     return new Team({
-      name: tm.name,
       leader: { id: tm.leader_id, name: tm.leader_name },
+      name: tm.name,
       followers,
       description: tm.description
     })
@@ -108,39 +111,28 @@ class Team {
    * @returns {Promise.<Object, Error>}
    */
   static async getList () {
-    const followers = await knex.select(
-      'teams.name as team_name',
-      'teams.leader_id',
-      'teams.leader_name',
-      'teams.description',
-      'followers.name',
-      'followers.id'
-    )
-      .from('teams')
-      .innerJoin('followers', 'teams.leader_id', 'followers.leader_id')
+    const teams = await knex('teams').select()
 
-    // TODO Refactoring
-    const teams = {}
-    followers.forEach(v => {
-      let tm = teams[v.team_name]
-      if (!tm) {
-        tm = teams[v.team_name] = new Team({
-          name: v.team_name,
-          leader: {
-            id: v.leader_id,
-            name: v.leader_name
-          },
-          description: v.description,
-          followers: []
-        })
-      }
-      tm.followers.push({
-        id: v.id,
-        name: v.name,
-        priority: v.priority
-      })
-    })
-    return teams
+    return Promise.all(teams.reduce((pv, cv) => {
+      pv.push(new Promise((resolve, reject) => {
+        knex('followers')
+          .select()
+          .where({leader_id: cv.leader_id})
+          .then(followers => {
+            resolve({
+              name: cv.name,
+              leader: {
+                id: cv.leader_id,
+                name: cv.leader_name
+              },
+              description: cv.description,
+              updatedAt: cv.updated_at,
+              followers
+            })
+          })
+      }))
+      return pv
+    }, []))
   }
 }
 
