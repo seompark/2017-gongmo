@@ -10,9 +10,9 @@ append contents
             label.label 팀장
             .field.is-grouped
                 .control.is-expanded
-                    input.input(value='1410', disabled)
+                    input.input(value=user.serial, disabled)
                 .control.is-expanded
-                    input.input.is-disabled(value='박성민', disabled)
+                    input.input.is-disabled(name='leaderName', value=user.name, disabled)
         .field#followers
             label.label 팀원
             if followers && followers.length > 0
@@ -50,7 +50,7 @@ append contents
                                     | 파일 선택
                             span.file-name#formfile-name
                 .control
-                    button.button(type='button') 이전 제출 파일 다운로드
+                    a.button(href=`/download/form/${user.serial}`) 이전 제출 파일 다운로드
         .field
             label.label 소스코드 제출
             .field.is-grouped
@@ -65,7 +65,7 @@ append contents
                                     | 파일 선택
                             span.file-name#sourcefile-name
                 .control
-                    button.button(type='button') 이전 제출 파일 다운로드
+                    a.button(href=`/download/source/${user.serial}`) 이전 제출 파일 다운로드
         .field
             label.label 메모
             .control
