@@ -23,21 +23,18 @@ const fileupload = upload.fields([{ name: 'formfile', maxCount: 1 }, { name: 'so
 
 router.route('/')
   .get((req, res) => {
-    Promise.all([
-      Team.findByLeaderId(req.user.serial),
-      File.findByLeaderId(req.user.serial)
-    ])
-      .then(result => {
-        if (!result[0]) {
+    Team.findByLeaderId(req.user.serial)
+      .then(team => {
+        if (!team) {
           return res.render('submit', { user: req.user })
         }
         res.render('submit', {
           user: req.user,
-          followers: result[0].followers,
-          name: result[0].name,
-          description: result[0].description,
-          formfile: result[1].form,
-          sourcefile: result[1].source
+          followers: team.followers,
+          name: team.name,
+          description: team.description,
+          formfile: !!team.file[File.TYPE.FORM_FILE],
+          sourcefile: !!team.file[File.TYPE.SOURCE_FILE]
         })
       })
       .catch(_ => {

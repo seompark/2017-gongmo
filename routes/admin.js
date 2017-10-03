@@ -34,12 +34,16 @@ router.route('/dashboard')
 
 router.route('/settings')
   .get((req, res) => {
-    res.render('admin/settings')
+    res.render('admin/settings', {
+      user: req.user
+    })
   })
 
 router.route('/notice')
   .get((req, res) => {
-    res.render('admin/notice')
+    res.render('admin/notice', {
+      user: req.user
+    })
   })
 
 // API //

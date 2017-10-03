@@ -49,8 +49,9 @@ append contents
                                 span.file-label
                                     | 파일 선택
                             span.file-name#formfile-name
-                .control
-                    a.button(href=`/download/form/${user.serial}`) 이전 제출 파일 다운로드
+                if formfile
+                    .control
+                        a.button(href=`/download/form/${user.serial}`) 이전 제출 파일 다운로드
         .field
             label.label 소스코드 제출
             .field.is-grouped
@@ -64,8 +65,9 @@ append contents
                                 span.file-label
                                     | 파일 선택
                             span.file-name#sourcefile-name
-                .control
-                    a.button(href=`/download/source/${user.serial}`) 이전 제출 파일 다운로드
+                if sourcefile
+                    .control
+                        a.button(href=`/download/source/${user.serial}`) 이전 제출 파일 다운로드
         .field
             label.label 메모
             .control

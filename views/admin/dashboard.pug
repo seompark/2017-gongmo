@@ -35,8 +35,12 @@ append body
                                 td= team.name
                                 td= team.leader.name
                                 td= team.leader.id
-                                td: a.button(href=`/download/form/${team.leader.id}`) 다운로드
-                                td: a.button(href=`/download/source/${team.leader.id}`) 다운로드
+                                td
+                                    if team.file.formfile
+                                        a.button(href=`/download/form/${team.leader.id}`) 다운로드
+                                td
+                                    if team.file.sourcefile
+                                        a.button(href=`/download/source/${team.leader.id}`) 다운로드
                                 td: table
                                     if team.followers.length > 0
                                         tr

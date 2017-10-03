@@ -1,5 +1,6 @@
 const knex = require('./knex')
 const moment = require('moment')
+const File = require('./File')
 
 class Team {
   /**
@@ -15,12 +16,17 @@ class Team {
     leader,
     name,
     followers = [],
-    description = ''
+    description = '',
+    file = {
+      formfile: false,
+      sourcefile: false
+    }
   }) {
     this.name = name || leader.name
     this.leader = leader
     this.followers = followers
     this.description = description
+    this.file = file
   }
 
   valueOf () {
@@ -96,12 +102,17 @@ class Team {
   static async findByLeaderId (id) {
     const followers = await knex('followers').where({ leader_id: id }).select()
     const tm = (await knex('teams').where({ leader_id: id }).select())[0]
+    const file = await File.findByLeaderId(id)
     if (!tm) return null
     return new Team({
       leader: { id: tm.leader_id, name: tm.leader_name },
       name: tm.name,
       followers,
-      description: tm.description
+      description: tm.description,
+      file: {
+        formfile: !!file[File.TYPE.FORM_FILE],
+        sourcefile: !!file[File.TYPE.SOURCE_FILE]
+      }
     })
   }
 
@@ -114,23 +125,25 @@ class Team {
     const teams = await knex('teams').select()
 
     return Promise.all(teams.reduce((pv, cv) => {
-      pv.push(new Promise((resolve, reject) => {
+      pv.push(Promise.all([
         knex('followers')
-          .select()
-          .where({leader_id: cv.leader_id})
-          .then(followers => {
-            resolve({
-              name: cv.name,
-              leader: {
-                id: cv.leader_id,
-                name: cv.leader_name
-              },
-              description: cv.description,
-              updatedAt: moment(cv.updated_at).format('MM월 DD일 hh시 mm분'),
-              followers
-            })
-          })
-      }))
+          .where({ leader_id: cv.leader_id })
+          .select(),
+        File.findByLeaderId(cv.leader_id)
+      ]).then(r => ({
+        name: cv.name,
+        leader: {
+          id: cv.leader_id,
+          name: cv.leader_name
+        },
+        description: cv.description,
+        updatedAt: moment(cv.updated_at).format('MM월 DD일 hh시 mm분'),
+        followers: r[0],
+        file: {
+          formfile: !!r[1][File.TYPE.FORM_FILE],
+          sourcefile: !!r[1][File.TYPE.SOURCE_FILE]
+        }
+      })))
       return pv
     }, []))
   }

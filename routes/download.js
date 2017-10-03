@@ -12,7 +12,7 @@ const router = new Router()
 router.route('/application')
   .get(auth.verifyPermission('S'), (req, res) => {
     admin.getApplicationPath().then(r => {
-      if (!r) return res.end('파일이 없습니다')
+      if (!r) return res.render('404')
       res.download(r)
     })
   })
