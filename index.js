@@ -47,3 +47,8 @@ app.use((req, res) => {
   res.render('404')
 })
 app.listen(port, () => console.log(`App listens on port ${port}`))
+
+process.on('SIGINT', err => {
+  app.close()
+  process.exit(err ? 1 : 0)
+})
