@@ -23,6 +23,7 @@
   "author": "a1p4ca",
   "license": "MIT",
   "dependencies": {
+    "archiver": "^2.1.0",
     "axios": "^0.16.2",
     "body-parser": "^1.18.0",
     "bulma": "^0.5.2",
