@@ -5,3 +5,4 @@ content/files/**/*
 content/data/**/*
 sessions/
 dist/
+.env
