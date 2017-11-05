@@ -9,15 +9,6 @@ const File = require('../src/db/File')
 
 const config = require('../config/index')
 
-const storage = multer.diskStorage({
-  destination (req, file, callback) {
-    callback(null, path.resolve(config.content, 'data'))
-  },
-  filename (req, file, callback) {
-    callback(null, `application${path.extname(file.originalName)}`)
-  }
-})
-
 router.get('/', (req, res) => res.redirect('/admin/dashboard'))
 
 router.route('/dashboard')
@@ -47,28 +38,28 @@ router.route('/notice')
     })
   })
 
-router.get('/download', (req, res) => {
-  const zip = path.join(__dirname, 'content/data/download.zip')
-  const output = fs.createWriteStream(zip)
-  const archive = archiver('zip')
+router.route('/download')
+  .get((req, res) => {
+    const zip = path.join(__dirname, '..', 'content/data/download.zip')
+    const output = fs.createWriteStream(zip)
+    const archive = archiver('zip')
 
-  output.on('close', () => {
-    res.download(zip)
-  })
-  archive.pipe(output)
+    output.on('close', () => {
+      res.download(zip)
+    })
+    archive.pipe(output)
 
-  ;(async () => {
-    const teams = await Team.getList()
-    // 파일이 존재하면
-    for (const team in teams) {
-      if (team.file.formfile || team.file.sourcefile) {
+    ;(async () => {
+      const teams = (await Team.getList()).filter(v => v.file.formfile || v.file.sourcefile)
+      // 파일이 존재하면
+      for (const team of teams) {
         // 파일을 가져옴
-        const file = await File.findByLeaderId(team.leader_id)
+        const file = await File.findByLeaderId(team.leader.id)
         // 소스파일 처리
         Object.values(file).forEach(file => {
           if (!file) return
           archive.file(
-            path.join(config.content, 'files', file.sourcefile.hash),
+            path.join(config.content, 'files', file.hash),
             path.join(
               `${team.name} - ${team.leader_id} ${team.leader_name}`,
               file.originalName
@@ -76,11 +67,10 @@ router.get('/download', (req, res) => {
           )
         })
       }
-    }
-  })().then(() => {
-    archive.finalize()
+    })().then(() => {
+      archive.finalize()
+    }).catch(console.error)
   })
-})
 
 router.route('/notice')
   .get((req, res) => {
