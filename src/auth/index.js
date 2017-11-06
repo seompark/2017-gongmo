@@ -21,7 +21,7 @@ module.exports.verifyPermission = (perm, redirect = true) => (req, res, next) =>
       const url = req.originalUrl
       return res.redirect(`/login?redirect=${url}`)
     }
-    return res.redirect('/404')
+    return res.render('404')
   }
   return next()
 }

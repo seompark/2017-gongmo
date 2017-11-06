@@ -63,14 +63,12 @@ class File {
     }, {})
   }
 
-  static async deleteLatest (leaderId) {
+  static async deleteLatest (leaderId, type) {
     const files = await File.findByLeaderId(leaderId)
-    for (const file of Object.values(files)) {
-      try {
-        await file.delete()
-      } catch (err) {
-        throw new Error(err)
-      }
+    try {
+      files[type] && files[type].delete()
+    } catch (err) {
+      throw new Error(err)
     }
   }
 

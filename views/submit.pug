@@ -3,11 +3,15 @@ extends page
 append contents
     .container.slim.section: form#form(method='post')
         .field
-            label.label 팀명
+            label.label
+                span.has-text-danger *&nbsp;
+                | 팀명 (비워두면 팀장 이름으로 채워집니다.)
             .control
-                input.input(name='teamName', value=name)
+                input.input(name='teamName', placeholder=user.name, value=name)
         .field
-            label.label 팀장
+            label.label
+                span.has-text-danger *&nbsp;
+                | 팀장
             .field.is-grouped
                 .control.is-expanded
                     input.input(value=user.serial, disabled)
@@ -37,7 +41,9 @@ append contents
                 .control
                     button.button#add-followers-btn(type='button') 팀원 추가
         .field
-            label.label 신청서
+            label.label
+                span.has-text-danger *&nbsp;
+                | 신청서
             .field.is-grouped
                 .control
                     .file.has-name
@@ -72,6 +78,9 @@ append contents
             label.label 메모
             .control
                 textarea.textarea(name='description')= description
+        .field.has-text-danger
+            p * 가 붙은 항목을 완성해야 최종 접수됨.
+            p
         .field.has-text-centered#message
             p &nbsp;
         .field.is-grouped.is-grouped-centered

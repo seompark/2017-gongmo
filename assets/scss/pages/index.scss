@@ -30,12 +30,12 @@
 #main-hero {
   position: fixed;
   width: 100vw;
+  height: 80vh;
   background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)); //, url(https://media.gcflearnfree.org/content/5588514bf07fac61f8440cf9_06_22_2015/keyboardandmouse_handsonkeyboard.png) center / cover;
 }
 
 #main-hero .hero-body {
-  padding-bottom: 9rem;
-  padding-top: 9rem;
+  padding-top: 12rem;
 }
 
 #submit-link-btn {
@@ -58,7 +58,7 @@
   position: relative;
   z-index: 100;
   background: $white-bis;
-  top: 9rem + 9rem + 20rem;
+  top: 47rem;
 }
 
 .notice-card {

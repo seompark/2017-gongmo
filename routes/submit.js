@@ -61,6 +61,7 @@ router.route('/')
     const pendingFileSave = (s, type) => {
       if (!req.files[s]) return
       const file = req.files[s][0]
+      promises.push(File.deleteLatest(req.user.serial, type))
       promises.push(new File({
         type,
         hash: file.filename,
@@ -75,9 +76,10 @@ router.route('/')
       followers: JSON.parse(followers),
       description
     }).save())
-    promises.push(File.deleteLatest(req.user.serial))
-    pendingFileSave('formfile', File.TYPE.FORM_FILE)
-    pendingFileSave('sourcefile', File.TYPE.SOURCE_FILE)
+    if (Object.keys(req.files).length > 0) {
+      pendingFileSave('formfile', File.TYPE.FORM_FILE)
+      pendingFileSave('sourcefile', File.TYPE.SOURCE_FILE)
+    }
 
     Promise.all(promises)
       .then(() => {
@@ -87,12 +89,17 @@ router.route('/')
         })
       })
       .catch(err => {
-        console.error(err)
         res.json({
           success: false,
-          error: err
+          error: err && err.message
         })
       })
   })
+
+router.get('/success', (req, res) => {
+  res.render('submit-success', {
+    user: req.user
+  })
+})
 
 module.exports = router

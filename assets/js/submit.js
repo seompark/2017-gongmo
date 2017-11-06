@@ -1,5 +1,4 @@
 import axios from 'axios'
-import moment from 'moment'
 
 const $ = document.querySelector.bind(document)
 const $$ = document.querySelectorAll.bind(document)
@@ -27,7 +26,6 @@ function main () {
 
   function cloneFollower () {
     const follower = clonedFollower.cloneNode(true)
-    console.log(follower)
     ;[0, 1].forEach(v => (follower.childNodes[v].childNodes[0].value = ''))
     return follower
   }
@@ -54,7 +52,7 @@ function main () {
 
     const formData = new window.FormData()
 
-    formData.append('name', $('input[name="teamName"]').value || $(`input[value="leaderName"]`))
+    formData.append('name', $('input[name="teamName"]').value || $(`input[name="leaderName"]`).value)
     formData.append('description', $('textarea[name="description"]').value)
     formData.append(
       'followers',
@@ -71,16 +69,18 @@ function main () {
     formData.append('formfile', formFile.files[0])
     formData.append('sourcefile', sourceFile.files[0])
 
-    const handleResult = isSuccess => {
-      const success = `<p class="has-text-grey">${moment().format('hh시 mm분 ss초')} : 저장되었습니다.</p>`
-      const fail = `<p class="has-text-danger">저장에 실패했습니다.</p>`
-      $('#message').innerHTML = isSuccess ? success : fail
+    const handleResult = error => {
+      if (!error) return window.location.assign('/submit/success')
+      $('#message').innerHTML = `<p class="has-text-danger">${error}</p>`
+      const input = $('input[name="teamName"]')
+      input.className += ' is-danger'
+      input.parentElement.insertAdjacentHTML('beforeend', `<p class="help is-danger">${error}</p>`)
     }
 
     saveBtn.classList.add('is-loading')
     axios.post('/submit', formData)
-      .catch(() => handleResult(false) && saveBtn.classList.remove('is-loading'))
-      .then(r => handleResult(r.data.success))
+      .catch(err => handleResult(err) && saveBtn.classList.remove('is-loading'))
+      .then(r => handleResult(r.data.error))
       .then(() => saveBtn.classList.remove('is-loading'))
   }
 

@@ -10,5 +10,38 @@ append body
                     li: a(href='/admin/dashboard') 대쉬보드
                     li: a.is-active 공지사항
                     li: a(href='/admin/settings') 설정
+        .column
+            .section
+                p.title.is-size-1 공지사항
+                .media
+                    .media-left
+                        figure.image.is-64x64
+                            img(src='/logo.png')
+                    .media-content
+                        .field
+                            p.control
+                                textarea.textarea
+                        .field
+                            p.control 
+                                button.button(id='submit') 제출
+            .section
+                each notice in notices
+                    .box
+                        article.media
+                            .media-left
+                                figure.image.is-64x64
+                                    img(src='/logo.png')
+                            .media-content
+                                .content
+                                    p
+                                        strong
+                                        | 관리자 
+                                        small
+                                        | 2017/11/15
+                                        br
+                                        | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla egestas. Nullam condimentum luctus turpis.
+                            .media-right
+                                button.delete
+
 append script
     script(src='/admin.bundle.js')
