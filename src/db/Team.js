@@ -57,7 +57,7 @@ class Team {
       .where({ name: this.name })
       .whereNot({ leader_id: this.leader.id })).length > 0) {
       const error = new Error('중복되는 팀 이름입니다.')
-      error.name = 'DUPNAME'
+      error.code = 'ERR_DUP_TEANAME'
       throw error
     }
     const teamQuery = knex('teams').where({ leader_id: this.leader.id })
