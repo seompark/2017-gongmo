@@ -61,13 +61,6 @@ router.route('/download')
         const file = await File.findByLeaderId(team.leader.id)
         // 소스파일 처리
         Object.values(file).forEach(file => {
-          console.log(
-            path.join(config.content, 'files', file.hash),
-            path.join(
-              `${team.name}/${team.leader.id} ${team.leader.name}`,
-              file.originalName
-            ).replace(' ', '_')
-          )
           if (!file) return
           archive.file(
             path.join(config.content, 'files', file.hash),
