@@ -55,6 +55,10 @@ router.route('/download')
     archive.pipe(output)
     ;(async () => {
       const teams = (await Team.getList()).filter(v => v.file.formfile || v.file.sourcefile)
+      const typeNames = {
+        [File.TYPE.FORM_FILE]: '신청서',
+        [File.TYPE.SOURCE_FILE]: '소스코드'
+      }
       // 파일이 존재하면
       for (const team of teams) {
         // 파일을 가져옴
@@ -65,7 +69,7 @@ router.route('/download')
           archive.file(
             path.join(config.content, 'files', file.hash),
             {
-              name: `${team.name}/[${team.leader.id} ${team.leader.name}] ${file.originalName}`
+              name: `${team.name}/[${team.name} - ${team.leader.id} ${team.leader.name} ${typeNames[file.type]}] ${file.originalName}`
             }
           )
         })

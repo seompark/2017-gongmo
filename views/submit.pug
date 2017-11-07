@@ -17,6 +17,8 @@ append contents
                     input.input(value=user.serial, disabled)
                 .control.is-expanded
                     input.input.is-disabled(name='leaderName', value=user.name, disabled)
+                .control.is-expanded
+                    input.input(name='contact', value=contact, placeholder='연락처')
         .field#followers
             label.label 팀원
             if followers && followers.length > 0
@@ -26,6 +28,8 @@ append contents
                             input.input.is-expanded(placeholder='학번', value=follower.id)
                         .control.is-expanded
                             input.input(placeholder='이름', value=follower.name)
+                        .control.is-expanded
+                            input.input(placeholder='연락처', value=follower.contact)
                         .control
                             button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
             else
@@ -35,6 +39,8 @@ append contents
                             input.input(placeholder='학번')
                         .control.is-expanded
                             input.input(placeholder='이름')
+                        .control.is-expanded
+                            input.input(placeholder='연락처')
                         .control
                             button.button.is-danger.is-outlined.remove-btn(type='button') 삭제
             .field
@@ -78,6 +84,11 @@ append contents
             label.label 메모
             .control
                 textarea.textarea(name='description')= description
+        .field
+            .control
+                label.checkbox
+                    input(type='checkbox')
+                    |  개인정보 수집 및 이용에 동의합니다.
         .field.has-text-danger
             p * 가 붙은 항목을 완성해야 최종 접수됨.
             p

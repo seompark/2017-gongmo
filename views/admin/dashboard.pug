@@ -32,6 +32,7 @@ append body
                                 th 팀명
                                 th 팀장 이름
                                 th 팀장 학번
+                                th 팀장 연락처
                                 th 신청서 다운로드
                                 th 소스파일 다운로드
                                 th 팀원
@@ -42,20 +43,32 @@ append body
                                         td= team.name
                                         td= team.leader.name
                                         td= team.leader.id
+                                        td= team.leader.contact
                                         td
                                             a.button(href=`/download/form/${team.leader.id}`) 다운로드
                                             td
                                                 if team.file.sourcefile
                                                     a.button(href=`/download/source/${team.leader.id}`) 다운로드
-                                            td: table
-                                                if team.followers.length > 0
-                                                    tr
-                                                        th 학번
-                                                        th 이름
-                                                each follower in team.followers
-                                                    tr
-                                                        td= follower.id
-                                                        td= follower.name
+                                            td
+                                                .dropdown.is-hoverable.is-right
+                                                    .dropdown-trigger
+                                                    - var controls = `followers-${team.leader.id}`
+                                                        button.button(aria-haspopup, aria-controls=controls)
+                                                            span 보기
+                                                            span.icon.is-small: i.fa.fa-angle-down(aria-hidden)
+                                                    .dropdown-menu(id=controls, role='menu')
+                                                        .dropdown-content
+                                                            .dropdown-item(style='width: 500px;'): table
+                                                                if team.followers.length > 0
+                                                                    tr
+                                                                        th 학번
+                                                                        th 이름
+                                                                        th 연락처
+                                                                each follower in team.followers
+                                                                    tr
+                                                                        td= follower.id
+                                                                        td= follower.name
+                                                                        td= follower.contact
 
 append script
     script(src='/admin.bundle.js')

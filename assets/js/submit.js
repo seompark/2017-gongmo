@@ -45,8 +45,39 @@ function main () {
     flw.children[2].children[0].addEventListener('click', removeFollower)
   }
 
+  function init () {
+    const contact = $('input[name="contact"]')
+    const teamName = $('input[name="teamName"]')
+    contact.className = contact.className.replace('is-danger', '')
+    teamName.className = teamName.className.replace('is-danger', '')
+  }
+
+  function validate () {
+    const checkbox = $('input[type="checkbox"]')
+    const contact = $('input[name="contact"]')
+
+    if (!checkbox.checked) {
+      window.alert('개인정보 수집 및 이용에 동의해주세요.')
+      return false
+    }
+
+    if (!contact.value) {
+      const input = $('input[name="contact"]')
+      input.className += ' is-danger'
+      $('#message').innerHTML = `<p class="has-text-danger">팀장 연락처를 채워주세요.</p>`
+      return false
+    }
+
+    return true
+  }
+
   function submit (e) {
     e && e.preventDefault()
+    init()
+
+    if (!validate()) {
+      return
+    }
 
     saveBtn.className += ' is-loading'
 
@@ -54,6 +85,7 @@ function main () {
 
     formData.append('name', $('input[name="teamName"]').value || $(`input[name="leaderName"]`).value)
     formData.append('description', $('textarea[name="description"]').value)
+    formData.append('contact', $('input[name="contact"]').value)
     formData.append(
       'followers',
       JSON.stringify(
@@ -61,6 +93,7 @@ function main () {
           .map((v, i) => ({
             id: Number(v.childNodes[0].childNodes[0].value),
             name: v.childNodes[1].childNodes[0].value,
+            contact: v.childNodes[2].childNodes[0].value,
             priority: i + 1
           }))
           .filter(v => v.id && v.name)

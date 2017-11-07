@@ -30,6 +30,7 @@ router.route('/')
         }
         res.render('submit', {
           user: req.user,
+          contact: team.leader.contact,
           followers: team.followers,
           name: team.name,
           description: team.description,
@@ -45,12 +46,15 @@ router.route('/')
   .post(fileupload, (req, res) => {
     const body = req.body
     if (!body) {
-      return res.json({ success: false, error: 'No data recieved' })
+      const error = new Error('No data recieved')
+      error.code = 'ERR_NO_DATA'
+      throw error
     }
 
     const leader = {
       name: req.user.name,
-      id: req.user.serial
+      id: req.user.serial,
+      contact: body.contact
     }
     const { name, followers, description } = body
 

@@ -4,6 +4,7 @@ exports.up = async knex => {
 
     table.integer('leader_id').notNullable().primary()
     table.string('leader_name').notNullable()
+    table.string('leader_contact').nullable()
     table.string('name').notNullable().unique()
     table.string('description').nullable()
     table.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
@@ -24,14 +25,17 @@ exports.up = async knex => {
     table.collate('utf8_unicode_ci')
 
     table.integer('id').notNullable().primary()
-    table.integer('leader_id').notNullable()
     table.string('name').notNullable()
+    table.string('contact').defaultTo('')
+    table.integer('leader_id').notNullable()
     table.integer('priority').notNullable()
 
     table.foreign('leader_id').references('teams.leader_id')
   })
 
   const notices = await knex.schema.createTable('notices', table => {
+    table.collate('utf8_unicode_ci')
+
     table.increments()
     table.timestamps()
     table.string('message')

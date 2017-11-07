@@ -15,6 +15,7 @@ class Team {
   constructor ({
     leader,
     name,
+    contact,
     followers = [],
     description = '',
     file = {
@@ -22,7 +23,7 @@ class Team {
       sourcefile: false
     }
   }) {
-    this.name = name || leader.name
+    this.name = name
     this.leader = leader
     this.followers = followers
     this.description = description
@@ -35,6 +36,7 @@ class Team {
         name: this.name,
         leader_id: this.leader.id,
         leader_name: this.leader.name,
+        leader_contact: this.leader.contact,
         description: this.description
       },
       followers: this.followers
@@ -42,6 +44,7 @@ class Team {
           leader_id: this.leader.id,
           id: v.id,
           name: v.name,
+          contact: v.contact,
           priority: v.priority
         }))
     }
@@ -112,7 +115,7 @@ class Team {
     const file = await File.findByLeaderId(id)
     if (!tm) return null
     return new Team({
-      leader: { id: tm.leader_id, name: tm.leader_name },
+      leader: { id: tm.leader_id, name: tm.leader_name, contact: tm.leader_contact },
       name: tm.name,
       followers,
       description: tm.description,
@@ -141,7 +144,8 @@ class Team {
         name: cv.name,
         leader: {
           id: cv.leader_id,
-          name: cv.leader_name
+          name: cv.leader_name,
+          contact: cv.leader_contact
         },
         description: cv.description,
         updatedAt: moment(cv.updated_at).format('MM월 DD일 hh시 mm분'),
