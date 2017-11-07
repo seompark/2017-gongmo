@@ -5,6 +5,9 @@ module.exports = class Notice {
     this.message = message
   }
 
+  /**
+   * @returns {Promise.<number, Error>}
+   */
   save () {
     return knex('notices')
       .returning('id')
