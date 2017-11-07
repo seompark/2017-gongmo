@@ -37,11 +37,9 @@ router.route('/')
           sourcefile: !!team.file[File.TYPE.SOURCE_FILE]
         })
       })
-      .catch(_ => {
-        console.error(_)
-        res.render('error', {
-          message: 'Database Error'
-        })
+      .catch(err => {
+        console.error(err)
+        res.render('error')
       })
   })
   .post(fileupload, (req, res) => {
@@ -56,32 +54,25 @@ router.route('/')
     }
     const { name, followers, description } = body
 
-    const promises = []
-
-    const pendingFileSave = (s, type) => {
-      if (!req.files[s]) return
-      const file = req.files[s][0]
-      promises.push(File.deleteLatest(req.user.serial, type))
-      promises.push(new File({
-        type,
-        hash: file.filename,
-        originalName: file.originalname,
-        leaderId: req.user.serial
-      }).save())
-    }
-
-    promises.push(new Team({
+    new Team({
       name,
       leader,
       followers: JSON.parse(followers),
       description
-    }).save())
-    if (Object.keys(req.files).length > 0) {
-      pendingFileSave('formfile', File.TYPE.FORM_FILE)
-      pendingFileSave('sourcefile', File.TYPE.SOURCE_FILE)
-    }
-
-    Promise.all(promises)
+    }).save()
+      .then(async () => {
+        if (Object.keys(req.files).length < 1) return Promise.resolve()
+        for (const type of Object.keys(req.files)) {
+          const file = req.files[type][0]
+          await File.deleteLatest(req.user.serial, type)
+          await new File({
+            type,
+            hash: file.filename,
+            originalName: file.originalname,
+            leaderId: req.user.serial
+          }).save()
+        }
+      })
       .then(() => {
         res.json({
           success: true,
@@ -89,15 +80,22 @@ router.route('/')
         })
       })
       .catch(err => {
-        if (err.name === 'DUPNAME') {
+        if (err.code === 'ERR_DUP_TEAMNAME') {
           res.json({
             success: false,
-            error: err.message
+            error: {
+              code: 'ERR_DUP_TEAMNAME',
+              message: '중복되는 팀명입니다.'
+            }
           })
         } else {
+          console.error(err)
           res.json({
             success: false,
-            error: '뭔가 잘못됐어요 ㅠㅠ'
+            error: {
+              code: 'ERR_INTERNAL',
+              message: '무언가 잘못됐어요 ㅠㅠ'
+            }
           })
         }
       })
