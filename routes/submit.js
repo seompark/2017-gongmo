@@ -89,10 +89,17 @@ router.route('/')
         })
       })
       .catch(err => {
-        res.json({
-          success: false,
-          error: err && err.message
-        })
+        if (err.name === 'DUPNAME') {
+          res.json({
+            success: false,
+            error: err.message
+          })
+        } else {
+          res.json({
+            success: false,
+            error: '뭔가 잘못됐어요 ㅠㅠ'
+          })
+        }
       })
   })
 

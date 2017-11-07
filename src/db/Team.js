@@ -56,7 +56,9 @@ class Team {
     if ((await knex('teams')
       .where({ name: this.name })
       .whereNot({ leader_id: this.leader.id })).length > 0) {
-      throw new Error('중복되는 팀 이름입니다.')
+      const error = new Error('중복되는 팀 이름입니다.')
+      error.name = 'DUPNAME'
+      throw error
     }
     const teamQuery = knex('teams').where({ leader_id: this.leader.id })
     const followersQuery = knex('followers').where({ leader_id: this.leader.id })
