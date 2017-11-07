@@ -46,6 +46,12 @@ app.use((req, res) => {
   res.status(404)
   res.render('404')
 })
+
+app.use((err, req, res, next) => {
+  res.render('error')
+  console.error(err)
+})
+
 app.listen(port, () => console.log(`App listens on port ${port}`))
 
 process.on('SIGINT', err => {
