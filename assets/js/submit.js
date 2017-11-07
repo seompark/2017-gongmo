@@ -71,10 +71,12 @@ function main () {
 
     const handleResult = error => {
       if (!error) return window.location.assign('/submit/success')
-      $('#message').innerHTML = `<p class="has-text-danger">${error}</p>`
-      const input = $('input[name="teamName"]')
-      input.className += ' is-danger'
-      input.parentElement.insertAdjacentHTML('beforeend', `<p class="help is-danger">${error}</p>`)
+      $('#message').innerHTML = `<p class="has-text-danger">${error.message}</p>`
+      if (error.code === 'ERR_DUP_TEAMNAME') {
+        const input = $('input[name="teamName"]')
+        input.className += ' is-danger'
+        input.parentElement.insertAdjacentHTML('beforeend', `<p class="help is-danger">${error.message}</p>`)
+      }
     }
 
     saveBtn.classList.add('is-loading')
