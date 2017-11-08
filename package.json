@@ -45,6 +45,7 @@
     "pug": "^2.0.0-rc.4",
     "serve-favicon": "^2.4.4",
     "session-file-store": "^1.1.2",
+    "smoothscroll-polyfill": "^0.4.0",
     "stickybits": "^1.5.3"
   },
   "devDependencies": {

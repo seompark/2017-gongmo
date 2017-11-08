@@ -3,8 +3,10 @@ import 'babel-polyfill'
 import 'noto-sans-kr/styles.css'
 
 import stickybits from 'stickybits'
+import smoothscroll from 'smoothscroll-polyfill'
 
 stickybits('#navbar')
+smoothscroll.polyfill()
 
 // NodeList#forEach polyfill
 if (window.NodeList && !window.NodeList.prototype.forEach) {
