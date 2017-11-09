@@ -132,4 +132,4 @@ function main () {
   cancelBtn.addEventListener('click', cancel)
 }
 
-window.addEventListener('load', main, false)
+window.addEventListener('DOMContentLoaded', main, false)
