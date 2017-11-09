@@ -1,16 +1,15 @@
 extends layout
 
 append body
-    .hero.is-large#main-hero
+    .hero#main-hero
         .hero-head
             include navbar
-        .hero-body.has-text-centered
-            .section
-                .container.has-text-centered
-                    p.title.has-text-white 2017 창의 IT 공모전
-                    p.subtitle.has-text-white 2017년 11월 1일 - 2017년 11월 30일
-                    a.button.is-large#submit-link-btn(href='/submit') 신청하기
-    section.section.has-text-centered#notice: .container.slim
+        .hero-body
+            .container.has-text-centered
+                p.title.has-text-white 2017 창의 IT 공모전
+                p.subtitle.has-text-white 2017년 11월 1일 - 2017년 11월 30일
+                a.button.is-large#submit-link-btn(href='/submit') 신청하기
+    section.has-text-centered.is-flex#notice: .container.slim#notice-container
         h2.subtitle.is-size-2 공지사항
         each notice in notices
             .box

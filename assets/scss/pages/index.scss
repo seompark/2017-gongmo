@@ -1,3 +1,7 @@
+body {
+  &.in-transition {}
+}
+
 .title {
   font-weight: 700 !important;
   @include mobile {
@@ -8,6 +12,9 @@
   }
   @include desktop {
     font-size: 4rem;
+  }
+  &:not(::last-child) {
+    margin-bottom: 2rem;
   }
 }
 
@@ -21,44 +28,55 @@
   @include desktop {
     font-size: 2rem;
   }
-}
-
-.subtitle:not(:last-child), .title:not(:last-child) {
-  margin-bottom: 3rem;
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
 }
 
 #main-hero {
-  position: fixed;
-  width: 100vw;
-  height: 80vh;
-  background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)); //, url(https://media.gcflearnfree.org/content/5588514bf07fac61f8440cf9_06_22_2015/keyboardandmouse_handsonkeyboard.png) center / cover;
-}
+  height: 85vh;
+  background: url("/background.svg") center / cover;
 
-#main-hero .hero-body {
-  padding-top: 12rem;
+  .hero-body {
+    display: flex;
+    align-items: center;
+  }
 }
 
 #submit-link-btn {
   color: #fff;
   border: 2px solid #ffffff;
   background-color: transparent;
-  @include desktop {
-    width: 10vw;
-  }
   transition: .5s all;
+
+  &:hover {
+    color: $primary;
+    background-color: $white;
+    border-color: white;
+  }
 }
 
-#submit-link-btn:hover {
-  color: $primary;
-  background-color: $white;
-  border-color: white;
+#notice-container {
+  padding: 1.1rem 1rem 2rem 1rem;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  margin: .9rem 0 .9rem 0;
+  background: #fff;
+  border-radius: 30px;
 }
 
 #notice {
-  position: relative;
-  z-index: 100;
+  justify-content: center;
   background: $white-bis;
-  top: 47rem;
+  min-height: 100vh;
+  background: #f8f8f8;
+}
+
+#logout-btn {
+  border: solid 1.5px #fff;
+}
+
+#login-btn {
+  border: solid 1.5px #fff;
 }
 
 .notice-card {

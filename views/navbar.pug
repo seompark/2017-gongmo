@@ -1,13 +1,21 @@
-nav.navbar.has-shadow#navbar: .container
+nav.navbar#navbar(role='navigation', aria-label='main navigation'): .container
     .navbar-brand
-        a.navbar-item#logo(href='/')
-            img(src='https://www.dimigo.hs.kr/layouts/minimal_dimigo/static/dimigo_logo.png')
-    .navbar-menu.nav-right
+        a.navbar-item.is-hidden-desktop(href='/')
+            img(src='/logo.png')
+        a.navbar-item.is-hidden-touch(href='/')
+            img(src='/brand_logo.png')
+        .navbar-burger(data-target='navMenu')
+            span
+            span
+            span
+    .navbar-menu.nav-right(id='navMenu')
         if user
-            .navbar-item= `${user.name}님 환영합니다`
-            .navbar-item
+            .navbar-item.is-hidden-touch: p= `${user.name}님 환영합니다`
+            .navbar-item.is-hidden-touch
                 form(action='/logout', method='post')
-                    button.button.is-primary.is-outlined#logout(type='submit') 로그아웃
+                    button.button.is-danger.is-outlined(type='submit') 로그아웃
+            .navbar-item.is-hidden-desktop
+                a.navbar-link(href='logout') 로그아웃
         else
-            .navbar-item.is-vcentered
-                a.button.is-primary.has-text-white(href='login') 로그인
+            .navbar-item
+                a.navbar-link(href='login') 로그인
