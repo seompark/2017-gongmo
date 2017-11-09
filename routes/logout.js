@@ -2,7 +2,7 @@ const Router = require('express').Router
 const router = new Router()
 
 router.route('/')
-  .post((req, res) => {
+  .all((req, res) => {
     req.session.user = null
     res.redirect('/')
   })
