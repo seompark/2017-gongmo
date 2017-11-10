@@ -8,3 +8,8 @@ services:
       - .:/app
   mysql:
     image: "mysql:alpine"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    # TODO env
