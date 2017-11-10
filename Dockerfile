@@ -1,5 +1,6 @@
 FROM node:9
 LABEL maintainer="a1p4ca(SeongMin Park) <sm@murye.io>"
+ENV HOME=/app
 
 RUN npm install pm2 -g
 
@@ -7,10 +8,9 @@ RUN npm install pm2 -g
 COPY package.json /tmp/package.json
 COPY package-lock.json /tmp/package-lock.json
 RUN cd /tmp && npm install
-RUN mkdir -p /usr/app && cp -a /tmp/node_modules /usr/app/
+RUN mkdir -p $HOME && cp -a /tmp/node_modules $HOME
 
-WORKDIR /usr/app
-ADD . /usr/app
+WORKDIR $HOME
 RUN npm run build
 
 # Expose ports
