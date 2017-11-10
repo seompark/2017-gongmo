@@ -1,7 +1,3 @@
-body {
-  &.in-transition {}
-}
-
 .title {
   font-weight: 700 !important;
   @include mobile {
@@ -13,7 +9,7 @@ body {
   @include desktop {
     font-size: 4rem;
   }
-  &:not(::last-child) {
+  &:not(:last-child) {
     margin-bottom: 2rem;
   }
 }

@@ -50,7 +50,7 @@ append contents
             label.label
                 span.has-text-danger *&nbsp;
                 | 신청서
-            .field.is-grouped
+            .field.is-grouped.form-field
                 .control
                     .file.has-name
                         label.file-label
@@ -64,9 +64,9 @@ append contents
                 if formfile
                     .control
                         a.button(href=`/download/form/${user.serial}`) 이전 제출 파일 다운로드
-        .field
+        .field.form-field
             label.label 소스코드 제출
-            .field.is-grouped
+            .field.is-grouped.form-field
                 .control
                     .file.has-name
                         label.file-label

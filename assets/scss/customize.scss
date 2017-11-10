@@ -1,6 +1,10 @@
 @import 'initialize';
 @import '~bulma/bulma';
 
+header {
+  background: $primary;
+}
+
 .title {
   font-weight: 500 !important;
 }

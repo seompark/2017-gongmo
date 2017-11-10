@@ -1,3 +1,10 @@
 .wrapper {
   background: $primary;
 }
+
+.form-field {
+  flex-wrap: wrap;
+  .control {
+    margin-bottom: .5rem !important;
+  }
+}
