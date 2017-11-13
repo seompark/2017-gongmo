@@ -10,7 +10,7 @@ export default {
     index: `${sources}/index`,
     submit: `${sources}/submit`,
     admin: `${sources}/admin`,
-    bbs: `${sources}/bbs`
+    notice: `${sources}/notice`
   },
   output: {
     path: path.join(__dirname, 'dist'),
