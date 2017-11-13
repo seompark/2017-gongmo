@@ -37,7 +37,7 @@ exports.up = async knex => {
     table.collate('utf8_unicode_ci')
 
     table.increments()
-    table.timestamps()
+    table.timestamps(true, true)
     table.string('message')
   })
 
