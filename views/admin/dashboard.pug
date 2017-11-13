@@ -50,25 +50,27 @@ append body
                                                 if team.file.sourcefile
                                                     a.button(href=`/download/source/${team.leader.id}`) 다운로드
                                             td
-                                                .dropdown.is-hoverable.is-right
-                                                    .dropdown-trigger
-                                                    - var controls = `followers-${team.leader.id}`
-                                                        button.button(aria-haspopup, aria-controls=controls)
-                                                            span 보기
-                                                            span.icon.is-small: i.fa.fa-angle-down(aria-hidden)
-                                                    .dropdown-menu(id=controls, role='menu')
-                                                        .dropdown-content
-                                                            .dropdown-item(style='width: 500px;'): table
-                                                                if team.followers.length > 0
+                                                if team.followers.length > 0
+                                                    .dropdown.is-hoverable.is-right
+                                                        .dropdown-trigger
+                                                        - var controls = `followers-${team.leader.id}`
+                                                            button.button(aria-haspopup, aria-controls=controls)
+                                                                span 보기
+                                                                span.icon.is-small: i.fa.fa-angle-down(aria-hidden)
+                                                        .dropdown-menu(id=controls, role='menu')
+                                                            .dropdown-content
+                                                                .dropdown-item(style='width: 500px;'): table
                                                                     tr
                                                                         th 학번
                                                                         th 이름
                                                                         th 연락처
-                                                                each follower in team.followers
-                                                                    tr
-                                                                        td= follower.id
-                                                                        td= follower.name
-                                                                        td= follower.contact
+                                                                    each follower in team.followers
+                                                                        tr
+                                                                            td= follower.id
+                                                                            td= follower.name
+                                                                            td= follower.contact
+                                                else
+                                                    p X
 
 append script
     script(src='/admin.bundle.js')
