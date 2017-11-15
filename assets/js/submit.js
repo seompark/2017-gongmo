@@ -123,7 +123,7 @@ function main () {
     window.location = '/'
   }
 
-  form.onsubmit = submit
+  saveBtn.addEventListener('click', submit)
   form.onkeydown = e => (e.ctrlKey && e.keyCode === 13 && !!submit()) || e.keyCode !== 13
   formFile.addEventListener('change', updateFileName(formFileName))
   sourceFile.addEventListener('change', updateFileName(sourceFileName))

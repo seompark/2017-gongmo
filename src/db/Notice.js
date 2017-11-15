@@ -1,4 +1,5 @@
-const knex = require('knex')
+const knex = require('./knex')
+const moment = require('moment')
 
 module.exports = class Notice {
   constructor (message) {
@@ -23,8 +24,16 @@ module.exports = class Notice {
     }
   }
 
+  static async delete (id) {
+    await knex('notices').where({ id }).del()
+  }
+
   static async getList () {
     const notices = await knex('notices').select()
-    return notices
+    return notices.map(v => ({
+      message: v.message,
+      id: v.id,
+      time: moment(v.created_at).format('MM월 DD일 hh:mm')
+    })).reverse()
   }
 }

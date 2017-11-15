@@ -13,16 +13,16 @@ append body
         .column
             .section
                 p.title.is-size-1 공지사항
-                form(action='POST'): .media
+                form(method='POST'): .media
                     .media-left
                         figure.image.is-64x64
                             img(src='/logo.png')
                     .media-content
                         .field
                             p.control
-                                textarea.textarea#notice-data
+                                textarea.textarea(name='message')
                         .field
-                            p.control 
+                            p.control
                                 button.button#submit 제출
             .section
                 each notice in notices
@@ -34,12 +34,10 @@ append body
                             .media-content
                                 .content
                                     p
-                                        strong
-                                            | 관리자 
-                                        small
-                                            | 2017/11/15
+                                        strong 관리자 
+                                        small= notice.time
                                         br
-                                        | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla egestas. Nullam condimentum luctus turpis.
+                                        | #{notice.message}
                             .media-right
                                 button.delete
 

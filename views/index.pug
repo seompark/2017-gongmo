@@ -5,7 +5,7 @@ append body
         .hero-head
             include navbar
         .hero-body
-            .container.has-text-centered
+            .container.has-text-centered(style='top: -5rem;')
                 p.title.has-text-white 2017 창의 IT 공모전
                 p.subtitle.has-text-white 2017년 11월 1일 - 2017년 11월 30일
                 a.button.is-large#submit-link-btn(href='/submit') 신청하기
@@ -22,10 +22,8 @@ append body
                             p
                                 strong
                                   | 관리자 
-                                small
-                                  | 2017/11/15
+                                small= notice.time
                                 br
-                                | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean efficitur sit amet massa fringilla egestas. Nullam condimentum luctus turpis.
-
+                                | #{notice.message}
 append script
     script(src='/index.bundle.js')

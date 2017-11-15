@@ -9,15 +9,13 @@ function main () {
 
 function deleteNotice (el) {
   return () => {
-    console.log(el)
     const accept = window.confirm('공지를 삭제하시겠습니까?')
-    const id = Number(el.id.replace('notice-', ''))
+    const id = el.id.replace('notice-', '')
 
     if (!accept) return
-
     el.classList.add('is-hidden')
     axios
-      .delete('/admin/notice', { id })
+      .delete('/admin/notice', { params: { id } })
       .then(({ data }) => {
         if (!data.success) el.classList.remove('is-hidden')
       })

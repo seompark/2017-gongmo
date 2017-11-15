@@ -5,6 +5,7 @@ const archiver = require('archiver')
 const router = new Router()
 const Team = require('../src/db/Team')
 const File = require('../src/db/File')
+const Notice = require('../src/db/Notice')
 
 const config = require('../config/index')
 
@@ -81,39 +82,40 @@ router.route('/download')
 
 router.route('/notice')
   .get((req, res) => {
-    res.render('admin/notice', {
-      user: req.user,
-      notices: [
-        {
-          title: '공지 테스트 첫번재입니다.',
-          content: '되는 내려온 무엇을 튼튼하며, 어디 봄바람이다. 이것이야말로 있으며, 무한한 작고 풀이 동산에는 보배를 불어 있는가? 무엇을 없으면 이상의 품고 석가는 따뜻한 소금이라 있다. 가진 풍부하게 때에, 든 청춘을 곧 방지하는 쓸쓸하랴? 산야에 가치를 없는 있다. 하는 두손을 할지라도 살 아니한 수 보이는 굳세게 쓸쓸하랴?',
-          date: new Date(),
-          id: 1
-        },
-        {
-          title: '공지 테스트 두번째입니다.',
-          content: '열락의 기관과 피고 얼음이 불러 못하다 것이다. 그림자는 청춘의 뭇 물방아 지혜는 심장은 곳으로 위하여서. 심장의 황금시대의 목숨이 돋고, 것이다. 힘차게 싹이 별과 얼마나 대고, 있는 풍부하게 칼이다. 보이는 군영과 그들의 많이 가진 그들은 밝은 쓸쓸하랴? 끓는 인생에 속에서 것이다. 그들의 보내는 구하지 품으며, 것이다. 희망의 피어나는 피고, 맺어, 구할 보배를 쓸쓸한 인류의 칼이다. 오아이스도 크고 할지니, 눈이 너의 고동을 칼이다. 소담스러운 있는 공자는 그것은 청춘은 않는 얼음이 우리 만천하의 이것이다. 튼튼하며, 얼마나 인생에 피어나기 품고 그들에게 웅대한 바이며, 그러므로 끓는다.',
-          date: new Date(),
-          id: 2
-        },
-        {
-          title: '공지사항 테스트 세번째입니다!!',
-          content: '',
-          date: new Date(),
-          id: 3
-        }
-      ]
-    })
+    Notice.getList()
+      .then(notices => {
+        res.render('admin/notice', {
+          notices
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        res.render('error')
+      })
   })
   .post((req, res) => {
-    // TODO
+    new Notice(req.body.message)
+      .save()
+      .then(() => res.redirect('/admin/notice'))
+      .catch(err => {
+        console.error(err)
+        res.render('error')
+      })
   })
   .delete((req, res) => {
-    const id = req.body.id
-    console.log(typeof id)
-    res.json({
-      success: true
-    })
+    const id = req.query.id
+    Notice.delete(id)
+      .then(() => {
+        res.json({
+          success: true
+        })
+      })
+      .catch(err => {
+        console.error(err)
+        res.json({
+          success: false
+        })
+      })
   })
 
 module.exports = router
