@@ -8,8 +8,9 @@ services:
       - .:/app
   mysql:
     image: "mysql:alpine"
+    environment:
+      - MYSQL_USERNAME=${MYSQL_USERNAME}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
     ports:
       - "3306:3306"
-    expose:
-      - "3306"
-    # TODO env
