@@ -1,17 +1,22 @@
 FROM node:9
 LABEL maintainer="a1p4ca(SeongMin Park) <sm@murye.io>"
 ENV HOME=/app
+ENV APP=$HOME/gongmo
+RUN mkdir -p $APP
+WORKDIR $APP
 
-RUN npm install pm2 -g
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+
+RUN yarn global add pm2
 
 # http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
-COPY package.json /tmp/package.json
-COPY package-lock.json /tmp/package-lock.json
-RUN cd /tmp && npm install
-RUN mkdir -p $HOME && cp -a /tmp/node_modules $HOME
+COPY package.json $APP/package.json
+COPY yarn.lock $APP/yarn.lock
+RUN yarn install
 
-WORKDIR $HOME
-RUN npm run build
+COPY . $APP
+
+RUN yarn run build
 
 # Expose ports
 EXPOSE 8080
