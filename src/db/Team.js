@@ -67,14 +67,14 @@ class Team {
     const followersQuery = knex('followers').where({ leader_id: this.leader.id })
     const value = this.valueOf()
 
-    await followersQuery.delete()
-    await knex('followers').insert(value.followers)
     if ((await teamQuery.select()).length > 0) {
       await teamQuery.update(value.team)
-      return
+    } else {
+      await knex('teams').insert(value.team)
     }
 
-    await knex('teams').insert(value.team)
+    await followersQuery.delete()
+    await knex('followers').insert(value.followers)
   }
 
   async delete () {
