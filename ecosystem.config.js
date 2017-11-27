@@ -2,9 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'gongmo',
-      watch: true,
-      ignore_watch: ['node_modules', 'views', 'assets', 'dist', 'content', '.idea', '.git'],
       script: 'index.js',
+      watch: false,
       env: {
         NODE_ENV: 'development'
       },
