@@ -27,6 +27,6 @@ module.exports = app => {
   app.use('/login', require('./login'))
   app.use('/logout', require('./logout'))
   app.use('/submit', auth.verifyPermission('S'), require('./submit'))
-  app.use('/admin', auth.verifyPermission('S', false), require('./admin'))
+  app.use('/admin', auth.verifyPermission('T', false), require('./admin'))
   app.use('/download', require('./download'))
 }
