@@ -22,4 +22,4 @@ RUN yarn run build
 EXPOSE 8080
 
 # Start
-CMD ["pm2-docker", "start", "--auto-exit", "--env", "production", "ecosystem.config.js"]
+ENTRYPOINT ["pm2-docker", "start", "--auto-exit", "--env", "production", "ecosystem.config.js"]
