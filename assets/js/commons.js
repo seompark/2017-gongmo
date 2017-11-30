@@ -6,12 +6,6 @@ import '../images/logo.png'
 import '../images/brand_logo.png'
 import '../images/background.svg'
 
-import stickybits from 'stickybits'
-import smoothscroll from 'smoothscroll-polyfill'
-
-stickybits('#navbar')
-smoothscroll.polyfill()
-
 // NodeList#forEach polyfill
 if (window.NodeList && !window.NodeList.prototype.forEach) {
   window.NodeList.prototype.forEach = function (callback, thisArg) {
