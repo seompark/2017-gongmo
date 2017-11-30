@@ -58,13 +58,17 @@
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   margin: .9rem 0 .9rem 0;
   background: #fff;
-  border-radius: 30px;
+  border-radius: 15px;
+  @include touch {
+    width: 100%;
+    margin: .9rem 1rem;
+  }
 }
 
 #notice {
   justify-content: center;
   background: $white-bis;
-  min-height: 100vh;
+  min-height: 25rem;
   background: #f8f8f8;
 }
 

@@ -11,3 +11,10 @@
     }
   }
 }
+
+#navMenu {
+  @include touch() {
+    position: fixed;
+    width: 100%;
+  }
+}
