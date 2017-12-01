@@ -5,18 +5,7 @@ const config = require('../config')
 const router = new Router()
 const Team = require('../src/db/Team')
 const File = require('../src/db/File')
-const path = require('path')
-const storage = multer.diskStorage({
-  destination (req, file, callback) {
-    callback(null, path.resolve(config.content, 'files'))
-  },
-  filename (req, file, callback) {
-    callback(null,
-      crypto.createHmac('sha256', Math.random().toString())
-        .update(Date.now().toString())
-        .digest('hex') + path.extname(file.originalname))
-  }
-})
+const { storage } = require('../src/utils')
 
 const upload = multer({ storage })
 const fileupload = upload.fields([{ name: 'formfile', maxCount: 1 }, { name: 'sourcefile', maxCount: 1 }])

@@ -1,5 +1,5 @@
-import '../scss/main.scss'
 import 'babel-polyfill'
+import '../scss/main.scss'
 import 'noto-sans-kr/styles.css'
 
 import '../images/logo.png'

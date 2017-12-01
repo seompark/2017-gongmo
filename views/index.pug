@@ -6,23 +6,46 @@ append body
         .hero-body
             .container.has-text-centered(style='top: -5rem;')
                 p.title.has-text-white 2017 창의 IT 공모전
-                p.subtitle.has-text-white 2017년 11월 1일 - 2017년 11월 30일
+                p.subtitle.has-text-white 11월 1일 ~ 12월 17일
                 a.button.is-large#submit-link-btn(href='/submit') 신청하기
     section.has-text-centered.is-flex#notice: .container.slim#notice-container
         h2.subtitle.is-size-2 공지사항
         each notice in notices
-            .box
-                article.media
-                    .media-left
-                        figure.image.is-64x64
-                            img(src='/logo.png')
-                    .media-content
-                        .content
-                            p
-                                strong
-                                  | 관리자 
-                                small= notice.time
-                                br
-                                | #{notice.message}
+            if notice.pinned
+                .box
+                    article.media
+                        .media-left
+                            figure.image.is-64x64
+                                img(src='/logo.png')
+                        .media-content
+                            .content
+                                p
+                                    strong 관리자 
+                                    small 고정된 공지
+                                    br
+                                    | #{notice.message}
+                            if notice.files
+                                .level: .level-left
+                                    each file in notice.files
+                                        .level-item(style='margin-right: 1rem;')
+                                            a.button(href=file.link, style='background: #f5f5f5')
+                                                .media-left
+                                                    span.icon
+                                                        i.fa.fa-file(arai-hidden='true')
+                                                .media-content: .content
+                                                    p= file.name
+            else
+                .box
+                    article.media
+                        .media-left
+                            figure.image.is-64x64
+                                img(src='/logo.png')
+                        .media-content
+                            .content
+                                p
+                                    strong 관리자 
+                                    small= notice.time
+                                    br
+                                    | #{notice.message}
 append script
     script(src='/index.bundle.js')
