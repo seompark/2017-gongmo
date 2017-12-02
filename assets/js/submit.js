@@ -144,6 +144,7 @@ function main () {
     }).then(result => {
       if (result.value) {
         swal('성공!', '삭제되었습니다.', 'success')
+          .then(() => (window.location = '/'))
       }
     })
   }
