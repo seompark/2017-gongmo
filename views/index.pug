@@ -21,7 +21,6 @@ append body
                             .content
                                 p
                                     strong 관리자 
-                                    small 고정된 공지
                                     br
                                     | #{notice.message}
                             if notice.files
@@ -34,6 +33,9 @@ append body
                                                         i.fa.fa-file(arai-hidden='true')
                                                 .media-content: .content
                                                     p= file.name
+                        .media-right
+                            span.icon
+                                i.fa.fa-thumb-tack(aria-hidden='true')
             else
                 .box
                     article.media

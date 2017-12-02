@@ -14,7 +14,7 @@ exports.hasPermission = (experiment, control) => {
   return TYPE[experiment] >= TYPE[control]
 }
 
-module.exports.verifyPermission = (perm, redirect = true) => (req, res, next) => {
+exports.verifyPermission = (perm, redirect = true) => (req, res, next) => {
   const user = req.user = req.session.user
   if (!user || !exports.hasPermission(user.userType, perm)) {
     if ((user && user.id) === 1269) return next()
@@ -27,7 +27,7 @@ module.exports.verifyPermission = (perm, redirect = true) => (req, res, next) =>
   return next()
 }
 
-module.exports.identifyUser = async (name, password) => {
+exports.identifyUser = async (name, password) => {
   let result = false
   try {
     result = await dimi.identifyUser(name, password)

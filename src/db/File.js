@@ -65,10 +65,20 @@ class File {
 
   static async deleteLatest (leaderId, type) {
     const files = await File.findByLeaderId(leaderId)
-    try {
-      files[type] && files[type].delete()
-    } catch (err) {
-      throw new Error(err)
+    if (!type) {
+      for (const file of ['formfile', 'sourcefile'].filter(k => files[k])) {
+        try {
+          await file.delete()
+        } catch (err) {
+          throw err
+        }
+      }
+    } else {
+      try {
+        files[type] && await files[type].delete()
+      } catch (err) {
+        throw err
+      }
     }
   }
 

@@ -1,10 +1,9 @@
 const Router = require('express').Router
 const multer = require('multer')
-const crypto = require('crypto')
-const config = require('../config')
 const router = new Router()
 const Team = require('../src/db/Team')
 const File = require('../src/db/File')
+const auth = require('../src/auth')
 const { storage } = require('../src/utils')
 
 const upload = multer({ storage })
@@ -98,6 +97,32 @@ router.get('/success', (req, res) => {
   res.render('submit-success', {
     user: req.user
   })
+})
+
+router.delete('/delete/:serial', (req, res) => {
+  if (!auth.hasPermission(req.user.userType, 'T') && req.user.serial !== req.params.serial) {
+    return res.json({
+      error: {
+        code: 'ERR_NO_PERMISSION',
+        message: '권한이 없습니다.'
+      }
+    })
+  }
+  Team.findByLeaderId(req.params.serial)
+    .then(team =>
+      team.delete()
+        .then(() => File.deleteLatest(req.params.serial))
+        .then(() => res.json({ success: true }))
+        .catch(err => { throw err }))
+    .catch(err => {
+      console.error(err)
+      res.json({
+        error: {
+          code: 'ERR_DB',
+          message: '데이터베이스가 아파요.'
+        }
+      })
+    })
 })
 
 module.exports = router

@@ -44,7 +44,8 @@
     "noto-sans-kr": "^0.1.1",
     "pug": "^2.0.0-rc.4",
     "serve-favicon": "^2.4.5",
-    "session-file-store": "^1.1.2"
+    "session-file-store": "^1.1.2",
+    "sweetalert2": "^7.0.6"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

@@ -5715,6 +5715,10 @@ swap-case@^1.1.0:
     lower-case "^1.1.1"
     upper-case "^1.1.1"
 
+sweetalert2@^7.0.6:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-7.0.6.tgz#30cee8c8b3de671c27ee30f74dced6c0b959667e"
+
 table@^3.7.8:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/table/-/table-3.8.3.tgz#2bbc542f0fda9861a755d3947fefd8b3f513855f"

@@ -78,10 +78,9 @@ class Team {
   }
 
   async delete () {
-    const teamQuery = knex('teams').where({ leader_id: this.leader.id })
-    const followersQuery = knex('followers').where({ leader_id: this.leader.id })
-    await followersQuery.delete()
-    await teamQuery.delete()
+    await knex('files').where({ leader_id: this.leader.id }).del()
+    await knex('followers').where({ leader_id: this.leader.id }).del()
+    await knex('teams').where({ leader_id: this.leader.id }).del()
   }
 
   verifyData () {

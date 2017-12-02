@@ -14,7 +14,7 @@ append contents
                 | 팀장
             .field.is-grouped
                 .control.is-expanded
-                    input.input(value=user.serial, disabled)
+                    input.input(name='serial', value=user.serial, disabled)
                 .control.is-expanded
                     input.input.is-disabled(name='leaderName', value=user.name, disabled)
                 .control.is-expanded
@@ -102,6 +102,6 @@ append contents
             .control
                 button.button.is-primary#save-btn 저장
             .control
-                a.button.is-light#cancel-btn(href='/') 취소
+                .button.is-light#delete-btn 신청 삭제
 append script
     script(src='/submit.bundle.js')
