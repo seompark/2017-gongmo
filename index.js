@@ -32,8 +32,11 @@ app.set('view engine', 'pug')
 
 app.use(helmet())
 app.use(logger('dev'))
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+  extended: true,
+  limit: '200MB'
+}))
+app.use(bodyParser.json({ limit: '200MB' }))
 app.use(cookieParser())
 app.use(session(sess))
 app.use(express.static(app.get('static')))
