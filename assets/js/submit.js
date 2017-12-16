@@ -124,7 +124,11 @@ function main () {
     }
 
     saveBtn.classList.add('is-loading')
-    axios.post('/submit', formData)
+    axios.post('/submit', formData, {
+      onUploadProgress (event) {
+        console.log(event.loaded)
+      }
+    })
       .catch(err => handleResult(err) && saveBtn.classList.remove('is-loading'))
       .then(r => handleResult(r.data.error))
       .then(() => saveBtn.classList.remove('is-loading'))
