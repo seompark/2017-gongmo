@@ -115,6 +115,7 @@ function main () {
         }).then(() => (window.location = '/'))
       }
       swal('이런!', error.message, 'error')
+      console.error(error)
       if (error.code === 'ERR_DUP_TEAMNAME') {
         const input = $('input[name="teamName"]')
         input.className += ' is-danger'

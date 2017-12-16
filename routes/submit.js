@@ -31,7 +31,13 @@ router.route('/')
         res.render('error')
       })
   })
-  .post(fileupload, (req, res) => {
+  .post((req, res, next) => {
+    res.setTimeout(1000 * 60 * 10, () => {
+      console.error('request has time out')
+      res.send(408)
+    })
+    next()
+  }, fileupload, (req, res) => {
     const body = req.body
     if (!body) {
       const error = new Error('No data recieved')

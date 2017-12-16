@@ -4,7 +4,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 const sources = './assets/js'
 
-export default {
+module.exports = {
   entry: {
     commons: `${sources}/commons`,
     index: `${sources}/index`,
