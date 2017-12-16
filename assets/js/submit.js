@@ -127,7 +127,8 @@ function main () {
     axios.post('/submit', formData, {
       onUploadProgress (event) {
         console.log(event.loaded)
-      }
+      },
+      timeout: 1000 * 60 * 5
     })
       .catch(err => handleResult(err) && saveBtn.classList.remove('is-loading'))
       .then(r => handleResult(r.data.error))
