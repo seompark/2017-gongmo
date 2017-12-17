@@ -11,6 +11,8 @@ const fileupload = upload.fields([{ name: 'formfile', maxCount: 1 }, { name: 'so
 
 router.route('/')
   .get((req, res) => {
+    res.redirect('/') // 마감
+    /*
     Team.findByLeaderId(req.user.serial)
       .then(team => {
         if (!team) {
@@ -30,6 +32,7 @@ router.route('/')
         console.error(err)
         res.render('error')
       })
+      */
   })
   .post((req, res, next) => {
     res.setTimeout(1000 * 60 * 10, () => {
@@ -38,6 +41,8 @@ router.route('/')
     })
     next()
   }, fileupload, (req, res) => {
+    return res.end() // 마감
+    /*
     const body = req.body
     if (!body) {
       const error = new Error('No data recieved')
@@ -97,6 +102,7 @@ router.route('/')
           })
         }
       })
+      */
   })
 
 router.get('/success', (req, res) => {
