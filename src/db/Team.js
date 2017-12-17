@@ -95,7 +95,7 @@ class Team {
         if (v.name.constructor !== String) err = new TypeError('Invalid type: follower.name which is in followers should be string.')
         if (isNaN(Number(v.id))) err = new TypeError('Invalid type: follower.id which is in followers should be number.')
         if (isNaN(Number(v.priority))) err = new TypeError('Invalid type: follower.priority which is in followers should be number.')
-        if (v.priority < 1 || v.priority > 3) err = new Error('Invalid data : follower.id which is in followers should be bigger than 0 and smaller than 5.')
+        if (v.priority < 1 || v.priority > 4) err = new Error('Invalid data : follower.id which is in followers should be bigger than 0 and smaller than 5.')
       } else {
         err = new Error('Not allowed null or undefined data.')
       }
