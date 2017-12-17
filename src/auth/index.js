@@ -22,6 +22,7 @@ exports.verifyPermission = (perm, redirect = true) => (req, res, next) => {
       const url = req.originalUrl
       return res.redirect(`/login?redirect=${url}`)
     }
+    res.statusCode = 404
     return res.render('404')
   }
   return next()
