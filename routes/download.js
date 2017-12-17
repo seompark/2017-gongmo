@@ -9,7 +9,7 @@ const router = new Router()
 
 router.get('/form/:leaderId', auth.verifyPermission('S', false), (req, res) => {
   const id = req.params.leaderId
-  if (req.user.serial !== id && !auth.hasPermission(req.user.userType, 'T')) {
+  if (req.user.serial !== id || !auth.hasPermission(req.user.userType, 'T')) {
     return res.render('404')
   }
   File.findByLeaderId(id)
@@ -22,7 +22,7 @@ router.get('/form/:leaderId', auth.verifyPermission('S', false), (req, res) => {
 
 router.get('/source/:leaderId', (req, res) => {
   const id = req.params.leaderId
-  if (req.user.serial !== id && !auth.hasPermission(req.user.userType, 'T')) {
+  if (req.user.serial !== id || !auth.hasPermission(req.user.userType, 'T')) {
     return res.render('404')
   }
   File.findByLeaderId(id)
