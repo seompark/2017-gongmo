@@ -2,7 +2,8 @@ exports.up = async knex => {
   const teams = await knex.schema.createTable('teams', table => {
     table.collate('utf8_unicode_ci')
 
-    table.integer('leader_id').notNullable().primary()
+    table.increments('idx').primary()
+    table.integer('leader_id').notNullable()
     table.string('leader_name').notNullable()
     table.string('leader_contact').nullable()
     table.string('name').notNullable().unique()
@@ -13,7 +14,8 @@ exports.up = async knex => {
   const files = await knex.schema.createTable('files', table => {
     table.collate('utf8_unicode_ci')
 
-    table.string('hash').notNullable().primary()
+    table.increments('idx').notNullable()
+    table.string('hash').notNullable()
     table.string('original_name').notNullable()
     table.integer('leader_id').notNullable()
     table.string('type').notNullable()
@@ -24,7 +26,8 @@ exports.up = async knex => {
   const followers = await knex.schema.createTable('followers', table => {
     table.collate('utf8_unicode_ci')
 
-    table.integer('id').notNullable().primary()
+    table.integer('idx').increments().primary()
+    table.integer('id').notNullable()
     table.string('name').notNullable()
     table.string('contact').defaultTo('')
     table.integer('leader_id').notNullable()
@@ -36,7 +39,7 @@ exports.up = async knex => {
   const notices = await knex.schema.createTable('notices', table => {
     table.collate('utf8_unicode_ci')
 
-    table.increments()
+    table.increments('idx').primary()
     table.timestamps(true, true)
     table.string('message')
   })

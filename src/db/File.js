@@ -20,8 +20,8 @@ class File {
 
   static get TYPE () {
     return {
-      FORM_FILE: 'formfile',
-      SOURCE_FILE: 'sourcefile'
+      FORM_FILE: 'formfile', // 신청서
+      SOURCE_FILE: 'sourcefile' // 실행 파일 및 코드
     }
   }
 
@@ -48,7 +48,7 @@ class File {
   /**
    *
    * @param leaderId
-   * @returns {Promise.<Object.<string, File>>}
+   * @returns {Promise.<{string, File}>}
    */
   static async findByLeaderId (leaderId) {
     const result = await knex('files').select().where({ leader_id: leaderId })
@@ -65,21 +65,7 @@ class File {
 
   static async deleteLatest (leaderId, type) {
     const files = await File.findByLeaderId(leaderId)
-    if (!type) {
-      for (const file of ['formfile', 'sourcefile'].filter(k => files[k])) {
-        try {
-          await file.delete()
-        } catch (err) {
-          throw err
-        }
-      }
-    } else {
-      try {
-        files[type] && await files[type].delete()
-      } catch (err) {
-        throw err
-      }
-    }
+    type ? files[type].delete() : files.forEach(v => v.delete())
   }
 
   async delete () {
