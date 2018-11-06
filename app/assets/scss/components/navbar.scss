@@ -1,0 +1,20 @@
+#navbar {
+  z-index: 100;
+  @include from($desktop) {
+    background: transparent;
+  }
+  & > .container {
+    @include from($desktop) {
+      background: $white;
+      border-radius: 0px 0px 60px 60px;
+      padding: 0 4rem 0 4rem;
+    }
+  }
+}
+
+#navMenu {
+  @include touch() {
+    position: fixed;
+    width: 100%;
+  }
+}

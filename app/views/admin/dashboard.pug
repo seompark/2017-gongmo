@@ -1,0 +1,76 @@
+extends ../layout
+
+append body
+    include ../navbar
+    .columns.is-marginless
+        .column.is-2
+            aside.menu#sticky-menu
+                p.menu-label General
+                ul.menu-list
+                    li: a.is-active 대쉬보드
+                    li: a(href='/admin/notice') 공지사항
+                    li: a(href='/admin/settings') 설정
+        .column#dashboard
+            .section
+                .content.container
+                    h1.is-size-1.has-text-weight-bold
+                        | 대쉬보드
+                    hr
+                    .section.download
+                        h2.has-text-weight-bold(id='다운로드')
+                            | 다운로드
+                            a.anchor-link(href='#다운로드') #
+                        a.button.is-large(href="/admin/download") 모두 다운로드
+                    .section.applications
+                        h2.has-text-weight-bold(id='신청_현황')
+                            | 신청 현황
+                            a.anchor-link(href='#신청_현황') #
+
+                        table.table.is-fullwidth
+                            tr
+                                th 최종 수정 날짜
+                                th 팀명
+                                th 팀장 이름
+                                th 팀장 학번
+                                th 팀장 연락처
+                                th 신청서 다운로드
+                                th 소스파일 다운로드
+                                th 팀원
+                            each team in teams
+                                if team.file.formfile
+                                    tr
+                                        td= team.updatedAt
+                                        td= team.name
+                                        td= team.leader.name
+                                        td= team.leader.id
+                                        td= team.leader.contact
+                                        td
+                                            a.button(href=`/download/form/${team.leader.id}`) 다운로드
+                                            td
+                                                if team.file.sourcefile
+                                                    a.button(href=`/download/source/${team.leader.id}`) 다운로드
+                                            td
+                                                if team.followers.length > 0
+                                                    .dropdown.is-hoverable.is-right
+                                                        .dropdown-trigger
+                                                        - var controls = `followers-${team.leader.id}`
+                                                            button.button(aria-haspopup, aria-controls=controls)
+                                                                span 보기
+                                                                span.icon.is-small: i.fa.fa-angle-down(aria-hidden)
+                                                        .dropdown-menu(id=controls, role='menu')
+                                                            .dropdown-content
+                                                                .dropdown-item(style='width: 500px;'): table
+                                                                    tr
+                                                                        th 학번
+                                                                        th 이름
+                                                                        th 연락처
+                                                                    each follower in team.followers
+                                                                        tr
+                                                                            td= follower.id
+                                                                            td= follower.name
+                                                                            td= follower.contact
+                                                else
+                                                    p X
+
+append script
+    script(src='/admin.bundle.js')
