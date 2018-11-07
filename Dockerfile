@@ -19,7 +19,7 @@ COPY . $APP
 RUN yarn run build
 
 # Expose ports
-EXPOSE 3000
+EXPOSE ${APP_INTERNAL_PORT}
 
 # Start
 ENTRYPOINT ["pm2-runtime", "start", "--env", "production", "ecosystem.config.js"]
