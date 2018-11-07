@@ -1,35 +1,50 @@
 .char {
-  display: block;
-  font-size: 10rem;
+  display: inline-block;
+  font-size: 15vw;
   margin-bottom: 8rem !important;
-  transform: translateX(-30px);
-} 
-
-.cute-left {
-  display: inline-block;
-  animation: cute-hands 0.5s infinite alternate ease-in;
-  transform-origin: bottom right;
+  transform: translateX(-1.5vw);
 }
 
-.cute-right {
+.hand {
   display: inline-block;
-  animation: cute-hands 0.5s infinite alternate ease-out;
-  transform-origin: bottom left;
+  
+  &.left {
+    animation: cute-hands 0.5s infinite alternate ease-in;
+    transform-origin: bottom right;
+  }
+  
+  &.right {
+    animation: cute-hands 0.5s infinite alternate ease-out;
+    transform-origin: bottom left;
+  }
 }
 
-.cute-eye {
+.cheek {
+  display: inline-block;
+
+  &.left {
+    animation: cute-cheek 0.1s infinite alternate steps(2);
+  }
+
+  &.right {
+    animation: cute-cheek 0.1s infinite alternate steps(2);
+  }
+
+}
+
+.eye {
   display: inline-block;
   animation: cute-eye 0.4s infinite alternate ease-in-out;
 }
 
-.cute-nose {
+.nose {
   display: inline-block;
   animation: cute-nose 0.6s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
 }
 
 @keyframes cute-hands {
   from {
-    transform: rotate(0deg);
+    transform: rotate(-10deg);
   }
 
   to {
@@ -39,20 +54,30 @@
 
 @keyframes cute-eye {
   from {
-    transform: translate(0, 1px) rotate(0deg);
+    transform: translate(10px, 1px) rotate(10deg);
   }
 
   to {
-    transform: translate(1px, 0) rotate(15deg);
+    transform: translate(10px, 0) rotate(30deg);
   }
 }
 
 @keyframes cute-nose {
-  0% {
+  from {
     transform: translateY(0);
   }
 
-  100% {
+  to {
     transform: translateY(10px);
+  }
+}
+
+@keyframes cute-cheek {
+  from {
+    transform: translateX(-2px);
+  }
+
+  to {
+    transform: translate(2px);
   }
 }
