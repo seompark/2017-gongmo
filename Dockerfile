@@ -1,4 +1,4 @@
-FROM node:9
+FROM node:10
 LABEL maintainer="a1p4ca(SeongMin Park) <sm@murye.io>"
 ENV HOME=/app
 ENV APP=$HOME/gongmo
