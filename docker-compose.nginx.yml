@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  web:
+    environment:
+      - VIRTUAL_HOST=${HOSTNAME}
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
