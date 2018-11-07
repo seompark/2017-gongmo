@@ -13,6 +13,6 @@ services:
       - MYSQL_ROOT_HOST=%
       - MYSQL_DATABASE=${MYSQL_DATABASE}
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT}:3306"
     volumes:
       - ./content/db:/var/lib/mysql
