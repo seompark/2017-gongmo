@@ -2,14 +2,13 @@ import path from 'path'
 import webpack from 'webpack'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
-const sources = './assets/js'
+const sources = './app/assets/js'
 
 module.exports = {
   entry: {
     commons: `${sources}/commons`,
     index: `${sources}/index`,
     submit: `${sources}/submit`,
-    admin: `${sources}/admin`,
     notice: `${sources}/notice`
   },
   output: {

@@ -6,10 +6,11 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 const session = require('express-session')
 const flash = require('express-flash')
+const favicon = require('serve-favicon')
 // const FileStore = require('session-file-store')(session)
 
-const config = require('./config')
-const knexconfig = require('./knexfile')
+const config = require('../config')
+const knexconfig = require('../knexfile')
 const knex = require('./src/db/knex')
 const routes = require('./routes')
 
@@ -27,7 +28,8 @@ const sess = {
 }
 
 app.set('views', path.resolve(__dirname, 'views'))
-app.set('static', path.resolve(__dirname, 'dist'))
+app.set('static1', path.resolve(__dirname, '../dist'))
+app.set('static2', path.resolve(__dirname, '../public'))
 app.set('view engine', 'pug')
 
 app.use(helmet())
@@ -39,7 +41,9 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json({ limit: '200MB' }))
 app.use(cookieParser())
 app.use(session(sess))
-app.use(express.static(app.get('static')))
+app.use(express.static(app.get('static1')))
+app.use(express.static(app.get('static2')))
+app.use(favicon(path.resolve(app.get('static2'), 'favicon.ico')))
 app.use(compression())
 app.use(flash())
 

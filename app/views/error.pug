@@ -3,4 +3,12 @@ extends layout
 append body
     .hero.is-fullheight.is-danger
         .hero-body: .container.has-text-centered
-            a.title(href='/',style='font-size: 10rem;') ヽ에(ﾟДﾟ)러ﾉ
+            a.title.char(href='/')
+                span.cute-left ヽ
+                | (
+                span.cute-eye ﾟ
+                span.cute-nose Д
+                span.cute-eye ﾟ
+                | )
+                span.cute-right ﾉ
+            h2.subtitle= `아라코`

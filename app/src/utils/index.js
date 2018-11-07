@@ -1,7 +1,7 @@
 const multer = require('multer')
 const crypto = require('crypto')
 const path = require('path')
-const config = require('../../config')
+const config = require('../../../config')
 
 const storage = multer.diskStorage({
   destination (req, file, callback) {
@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
       crypto.createHmac('sha256', Math.random().toString())
         .update(Date.now().toString())
         .digest('hex') + path.extname(file.originalname))
-  }
+  } 
 })
 
 exports.storage = storage

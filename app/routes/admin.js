@@ -7,7 +7,7 @@ const Team = require('../src/db/Team')
 const File = require('../src/db/File')
 const Notice = require('../src/db/Notice')
 
-const config = require('../config/index')
+const config = require('../../config')
 
 router.get('/', (req, res) => res.redirect('/admin/dashboard'))
 

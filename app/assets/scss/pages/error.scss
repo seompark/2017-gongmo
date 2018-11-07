@@ -1,0 +1,58 @@
+.char {
+  display: block;
+  font-size: 10rem;
+  margin-bottom: 8rem !important;
+  transform: translateX(-30px);
+} 
+
+.cute-left {
+  display: inline-block;
+  animation: cute-hands 0.5s infinite alternate ease-in;
+  transform-origin: bottom right;
+}
+
+.cute-right {
+  display: inline-block;
+  animation: cute-hands 0.5s infinite alternate ease-out;
+  transform-origin: bottom left;
+}
+
+.cute-eye {
+  display: inline-block;
+  animation: cute-eye 0.4s infinite alternate ease-in-out;
+}
+
+.cute-nose {
+  display: inline-block;
+  animation: cute-nose 0.6s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes cute-hands {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(30deg);
+  }
+}
+
+@keyframes cute-eye {
+  from {
+    transform: translate(0, 1px) rotate(0deg);
+  }
+
+  to {
+    transform: translate(1px, 0) rotate(15deg);
+  }
+}
+
+@keyframes cute-nose {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(10px);
+  }
+}

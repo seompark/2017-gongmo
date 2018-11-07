@@ -2,9 +2,10 @@
   "name": "gongmo",
   "version": "1.0.0",
   "description": "창의 it 공모 제출 시스템",
-  "main": "index.js",
+  "main": "./app/app.js",
   "scripts": {
     "start": "pm2 start ecosystem.config.js --env production --log-date-format=\"YYYY-MM-DD HH:mm Z\"",
+    "start:dev": "concurrently \"yarn build-dev\" \"nodemon ./app/app.js\"",
     "stop": "pm2 stop gongmo",
     "restart": "pm2 restart gongmo",
     "logs": "pm2 logs gongmo",
@@ -14,6 +15,10 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "lint": "standard",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "nodemonConfig": {
+    "ignore": ["app/assets/*", "app/views/*"],
+    "delay": "1500"
   },
   "standard": {
     "ignore": [
