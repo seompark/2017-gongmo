@@ -9,6 +9,7 @@ services:
   mysql:
     image: "mysql:latest"
     environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=true
       - MYSQL_USERNAME=${MYSQL_USERNAME}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
