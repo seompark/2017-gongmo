@@ -3,7 +3,7 @@ require('dotenv').config()
 
 module.exports = {
   secret: process.env.COOKIE_SECRET,
-  port: 8080,
+  port: 3000,
   dimigo: {
     host: process.env.DIMIGO_API_HOST,
     username: process.env.DIMIGO_API_USERNAME,
