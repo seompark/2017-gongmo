@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'gongmo',
-      script: 'src/app.js',
+      script: 'app/app.js',
       watch: false,
       env: {
         NODE_ENV: 'development'
