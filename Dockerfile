@@ -5,8 +5,6 @@ ENV APP=$HOME/gongmo
 RUN mkdir -p $APP
 WORKDIR $APP
 
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
-
 RUN yarn global add pm2@3
 
 # http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
