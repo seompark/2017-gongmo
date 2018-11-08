@@ -1,5 +1,5 @@
 FROM node:10
-LABEL maintainer="a1p4ca(SeongMin Park) <sm@murye.io>"
+LABEL maintainer="a1p4ca(SeongMin Park) <dev.alpaca@gmail.com>"
 ENV HOME=/app
 ENV APP=$HOME/gongmo
 RUN mkdir -p $APP
