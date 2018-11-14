@@ -16,5 +16,9 @@ module.exports = {
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE
   },
-  content: path.resolve(__dirname, '..', 'content')
+  content: path.resolve(__dirname, '..', 'content'),
+  period: {
+    start: new Date(2018, 11 - 1, 10),
+    end: new Date(2018, 12 - 1, 16, 23)
+  }
 }

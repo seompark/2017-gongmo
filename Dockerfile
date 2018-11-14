@@ -14,10 +14,10 @@ RUN yarn install
 
 COPY . $APP
 
-RUN yarn run build
+RUN yarn run build:prod
 
 # Expose ports
 EXPOSE ${APP_INTERNAL_PORT}
 
 # Start
-ENTRYPOINT ["pm2-runtime", "start", "--env", "production", "ecosystem.config.js"]
+CMD ["yarn", "start:docker"]

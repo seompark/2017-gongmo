@@ -3,12 +3,15 @@ module.exports = {
     {
       name: 'gongmo',
       script: 'app/app.js',
-      watch: false,
       env: {
         NODE_ENV: 'development'
       },
       env_production: {
         NODE_ENV: 'production'
+      },
+      watch: '.',
+      'watch_options': {
+        usePolling: true
       }
     }
   ]

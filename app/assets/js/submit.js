@@ -14,7 +14,7 @@ function main () {
   const rmvBtns = $$('.remove-btn')
   const saveBtn = $('#save-btn')
   const deleteBtn = $('#delete-btn')
-  const clonedFollower = $$('.follower')[0].cloneNode(true)
+  const clonedFollower = $('.follower').cloneNode(true)
   const followersField = $('#followers')
 
   const leaderName = $(`input[name="leaderName"]`).value
@@ -22,9 +22,9 @@ function main () {
 
   function updateFileName (el) {
     return e => {
-      if (e.target.files.length > 0) {
-        el.innerHTML = e.target.files[0].name
-      }
+      if (e.target.files.length === 0) return
+      const fileName = e.target.files[0].name
+      el.innerHTML = fileName
     }
   }
 
@@ -46,7 +46,7 @@ function main () {
 
     const flw = cloneFollower()
     followersField.insertBefore(flw, addBtn.parentElement.parentElement)
-    flw.children[2].children[0].addEventListener('click', removeFollower)
+    flw.children[3].children[0].addEventListener('click', removeFollower)
   }
 
   function init () {
@@ -123,16 +123,14 @@ function main () {
       }
     }
 
-    saveBtn.classList.add('is-loading')
     axios.post('/submit', formData, {
       onUploadProgress (event) {
-        console.log(event.loaded)
+        saveBtn.innerHTML = Math.floor(event.loaded * 100 / event.total)
       },
       timeout: 1000 * 60 * 5
     })
-      .catch(err => handleResult(err) && saveBtn.classList.remove('is-loading'))
+      .catch(err => handleResult(err))
       .then(r => handleResult(r.data.error))
-      .then(() => saveBtn.classList.remove('is-loading'))
   }
 
   function deleteTeam () {

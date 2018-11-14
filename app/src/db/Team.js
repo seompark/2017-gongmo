@@ -13,36 +13,37 @@ class Team {
    * @param {Team} team
    */
   constructor ({
+    idx,
     leader,
     name,
-    contact,
     followers = [],
     description = '',
-    file = {
-      formfile: false,
-      sourcefile: false
-    }
+    files = [],
+    updatedAt
   }) {
+    this.idx = idx
     this.name = name
     this.leader = leader
     this.followers = followers
     this.description = description
-    this.file = file
+    this.files = files
+    this.updatedAt = updatedAt
   }
 
   valueOf () {
     return {
       team: {
+        idx: this.idx,
         name: this.name,
-        leader_id: this.leader.id,
+        leader_serial: this.leader.serial,
         leader_name: this.leader.name,
         leader_contact: this.leader.contact,
         description: this.description
       },
       followers: this.followers
         .map(v => ({
-          leader_id: this.leader.id,
-          id: v.id,
+          team_idx: this.idx,
+          serial: v.serial,
           name: v.name,
           contact: v.contact,
           priority: v.priority
@@ -58,13 +59,13 @@ class Team {
     this.verifyData()
     if ((await knex('teams')
       .where({ name: this.name })
-      .whereNot({ leader_id: this.leader.id })).length > 0) {
+      .whereNot({ leader_serial: this.leader.serial })).length > 0) {
       const error = new Error('중복되는 팀 이름입니다.')
       error.code = 'ERR_DUP_TEANAME'
       throw error
     }
-    const teamQuery = knex('teams').where({ leader_id: this.leader.id })
-    const followersQuery = knex('followers').where({ leader_id: this.leader.id })
+    const teamQuery = knex('teams').where({ leader_serial: this.leader.serial })
+    const followersQuery = knex('followers').where({ leader_serial: this.leader.serial })
     const value = this.valueOf()
 
     if ((await teamQuery.select()).length > 0) {
@@ -78,9 +79,7 @@ class Team {
   }
 
   async delete () {
-    await knex('files').where({ leader_id: this.leader.id }).del()
-    await knex('followers').where({ leader_id: this.leader.id }).del()
-    await knex('teams').where({ leader_id: this.leader.id }).del()
+    await knex('teams').where({ team_idx: this.idx }).del()
   }
 
   verifyData () {
@@ -89,11 +88,11 @@ class Team {
     if (this.name.constructor !== String) err = new TypeError(`Invalid type: name should be String but ${this.name.constructor}.`)
     if (!this.leader) err = new Error('Invalid data: leader should be Object.')
     if (this.leader.name.constructor !== String) err = new TypeError(`Invalid type: leader.name should be String but ${this.leader.name.constructor}.`)
-    if (isNaN(Number(this.leader.id))) err = new TypeError(`Invalid type: leader.id should be Number but ${this.leader.id.constructor}.`)
+    if (isNaN(Number(this.leader.serial))) err = new TypeError(`Invalid type: leader.id should be Number but ${this.leader.id.constructor}.`)
     this.followers.forEach(v => {
-      if (v.name && v.id && v.priority) {
+      if (v.name && v.serial && v.priority) {
         if (v.name.constructor !== String) err = new TypeError('Invalid type: follower.name which is in followers should be string.')
-        if (isNaN(Number(v.id))) err = new TypeError('Invalid type: follower.id which is in followers should be number.')
+        if (isNaN(Number(v.serial))) err = new TypeError('Invalid type: follower.id which is in followers should be number.')
         if (isNaN(Number(v.priority))) err = new TypeError('Invalid type: follower.priority which is in followers should be number.')
         if (v.priority < 1 || v.priority > 4) err = new Error('Invalid data : follower.id which is in followers should be bigger than 0 and smaller than 5.')
       } else {
@@ -103,59 +102,68 @@ class Team {
     if (err) throw err
   }
 
-  /**
-   * 팀장 학번으로 팀 정보를 가져온다.
-   * @param {number} id
-   * @returns {Promise.<Team>}
-   */
-  static async findByLeaderId (id) {
-    const followers = await knex('followers').where({ leader_id: id }).select()
-    const tm = (await knex('teams').where({ leader_id: id }).select())[0]
-    const file = await File.findByLeaderId(id)
-    if (!tm) return null
-    return new Team({
-      leader: { id: tm.leader_id, name: tm.leader_name, contact: tm.leader_contact },
-      name: tm.name,
-      followers,
-      description: tm.description,
-      file: {
-        formfile: !!file[File.TYPE.FORM_FILE],
-        sourcefile: !!file[File.TYPE.SOURCE_FILE]
-      }
+  static format (team) {
+    return {
+      idx: team.idx,
+      name: team.name,
+      leader: {
+        serial: team.leader_serial,
+        name: team.leader_name,
+        contact: team.leader_contact
+      },
+      description: team.description,
+      updatedAt: moment(team.updated_at).format('MM월 DD일 hh시 mm분')
+    }
+  }
+
+  static formatFollowers (followers) {
+    return followers.map(v => ({
+      idx: v.idx,
+      serial: v.serial,
+      name: v.name,
+      contact: v.contact
+    }))
+  }
+
+  static findByTeamIdx (idx) {
+    return Team.findOne({ idx })
+  }
+
+  static findByLeaderSerial (serial) {
+    return Team.findOne({ leader_serial: serial })
+  }
+
+  static async findOne (query) {
+    const team = (await knex('teams').where(query).select())[0]
+
+    return team && new Team({
+      ...Team.format(team),
+      followers:
+        Team.formatFollowers(await knex('followers')
+          .where({ team_idx: team.idx }).select()),
+      files: await File.findByTeamIdx(team.idx)
     })
   }
 
   /**
    * 모든 팀 정보를 가져온다.
    * TODO
-   * @returns {Promise.<Object, Error>}
+   * @returns {Promise<Object, Error>}
    */
   static async getList () {
     const teams = await knex('teams').select()
-
-    return Promise.all(teams.reduce((pv, cv) => {
-      pv.push(Promise.all([
-        knex('followers')
-          .where({ leader_id: cv.leader_id })
-          .select(),
-        File.findByLeaderId(cv.leader_id)
-      ]).then(r => ({
-        name: cv.name,
-        leader: {
-          id: cv.leader_id,
-          name: cv.leader_name,
-          contact: cv.leader_contact
-        },
-        description: cv.description,
-        updatedAt: moment(cv.updated_at).format('MM월 DD일 hh시 mm분'),
-        followers: r[0],
-        file: {
-          formfile: !!r[1][File.TYPE.FORM_FILE],
-          sourcefile: !!r[1][File.TYPE.SOURCE_FILE]
-        }
-      })))
-      return pv
-    }, []))
+    return Promise.all(teams.map(async team => new Team({
+      ...Team.format(team),
+      followers: Team.formatFollowers(
+        await knex('followers')
+          .where({ team_idx: team.idx })
+          .select()
+      ),
+      files: (await knex('files')
+        .where({ team_idx: team.idx })
+        .select())
+        .map(File.format)
+    })))
   }
 }
 

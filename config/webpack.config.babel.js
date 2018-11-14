@@ -64,7 +64,17 @@ module.exports = {
       }
     ]
   },
-  // TODO dev server setting
+  devServer: {
+    contentBase: path.join(__dirname, 'public'),
+    watchOptions: {
+      poll: true
+    },
+    host: '0.0.0.0',
+    port: process.env.DEVSERVER_PORT,
+    proxy: {
+      '**': 'http://localhost:' + process.env.APP_INTERNAL_PORT
+    }
+  },
   devtool: '#eval-source-map',
   plugins: [
     new ExtractTextPlugin('bundle.css')

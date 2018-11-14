@@ -1,38 +1,31 @@
 const { Router } = require('express')
 const auth = require('../src/auth')
 const path = require('path')
-const File = require('../src/db/File')
+const Team = require('../src/db/Team')
 const config = require('../../config')
 const filePath = path.resolve(config.content, 'files')
 
 const router = new Router()
 
-router.get('/form/:leaderId', auth.verifyPermission('S', false), (req, res) => {
-  const id = req.params.leaderId
-  if (req.user.serial !== id && !auth.hasPermission(req.user.userType, 'T') && req.user.id !== 1269) {
-    res.statusCode = 404
-    return res.render('404')
-  }
-  File.findByLeaderId(id)
-    .then(r => {
-      if (!r.formfile) return res.attachment('blank') && res.end()
-      res.download(path.resolve(filePath, r.formfile.hash), `${r.formfile.originalName}`)
-    })
-    .catch(err => console.error(err))
-})
+router.get('/:teamIdx/:type', auth.verifyPermission('S', false), (req, res) => {
+  const { teamIdx, type } = req.params
 
-router.get('/source/:leaderId', (req, res) => {
-  const id = req.params.leaderId
-  if (req.user.serial !== id && !auth.hasPermission(req.user.userType, 'T') && req.user.id !== 1269) {
-    res.statusCode = 404
-    return res.render('404')
-  }
-  File.findByLeaderId(id)
-    .then(r => {
-      if (!r.sourcefile) return res.attachment('blank') && res.end()
-      res.download(path.resolve(filePath, r.sourcefile.hash), `${r.sourcefile.originalName}`)
+  Team.findByTeamIdx(teamIdx)
+    .then(team => {
+      if (
+        (req.user.serial !== team.leader.serial) &&
+        !auth.hasPermission(req.user.userType, 'T') &&
+        (req.user.id !== '1269')
+      ) return res.status(403).render('error')
+
+      const file = team.files
+        .filter(v => v.type === type)[0]
+
+      file
+        ? res.download(path.resolve(filePath, file.hash), file.originalName)
+        : res.attachment('blank') && res.end() // 왜 404로 안 했는지 모르겠음
     })
-    .catch(err => console.error(err))
+    .catch(console.error)
 })
 
 module.exports = router

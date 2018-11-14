@@ -4,16 +4,17 @@ const router = new Router()
 const Team = require('../src/db/Team')
 const File = require('../src/db/File')
 const auth = require('../src/auth')
-const { storage } = require('../src/utils')
+const storage = require('../src/storage')
+const { isPeriod } = require('../src/utils')
 
 const upload = multer({ storage })
 const fileupload = upload.fields([{ name: 'formfile', maxCount: 1 }, { name: 'sourcefile', maxCount: 1 }])
 
 router.route('/')
   .get((req, res) => {
-    res.redirect('/') // 마감
-    /*
-    Team.findByLeaderId(req.user.serial)
+    if (!isPeriod()) return res.redirect('/')
+
+    Team.findByLeaderSerial(req.user.serial)
       .then(team => {
         if (!team) {
           return res.render('submit', { user: req.user })
@@ -32,7 +33,6 @@ router.route('/')
         console.error(err)
         res.render('error')
       })
-      */
   })
   .post((req, res, next) => {
     res.setTimeout(1000 * 60 * 10, () => {
@@ -41,8 +41,8 @@ router.route('/')
     })
     next()
   }, fileupload, (req, res) => {
-    return res.end() // 마감
-    /*
+    if (!isPeriod()) return res.status(404).end()
+
     const body = req.body
     if (!body) {
       const error = new Error('No data recieved')
@@ -52,7 +52,7 @@ router.route('/')
 
     const leader = {
       name: req.user.name,
-      id: req.user.serial,
+      serial: req.user.serial,
       contact: body.contact
     }
     const { name, followers, description } = body
@@ -63,8 +63,8 @@ router.route('/')
       followers: JSON.parse(followers),
       description
     }).save()
-      .then(async () => {
-        if (Object.keys(req.files).length < 1) return Promise.resolve()
+      .then(async v => {
+        if (Object.keys(req.files).length < 1) return
         for (const type of Object.keys(req.files)) {
           const file = req.files[type][0]
           await File.deleteLatest(req.user.serial, type)
@@ -72,7 +72,7 @@ router.route('/')
             type,
             hash: file.filename,
             originalName: file.originalname,
-            leaderId: req.user.serial
+            team_idx: v.team_idx
           }).save()
         }
       })
@@ -87,7 +87,7 @@ router.route('/')
           res.json({
             success: false,
             error: {
-              code: 'ERR_DUP_TEAMNAME',
+              code: err.code,
               message: '중복되는 팀명입니다.'
             }
           })
@@ -102,7 +102,6 @@ router.route('/')
           })
         }
       })
-      */
   })
 
 router.get('/success', (req, res) => {

@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    ports:
+      - ${DEVSERVER_PORT}:${DEVSERVER_PORT}
+    volumes:
+      - .:${APP}
+      - ${APP}/node_modules/
+    entrypoint:
+      - yarn
+      - start:dev

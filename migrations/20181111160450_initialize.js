@@ -3,7 +3,7 @@ exports.up = async knex => {
     table.collate('utf8_unicode_ci')
 
     table.increments('idx').primary()
-    table.integer('leader_id').notNullable()
+    table.string('leader_serial').notNullable()
     table.string('leader_name').notNullable()
     table.string('leader_contact').nullable()
     table.string('name').notNullable().unique()
@@ -14,37 +14,35 @@ exports.up = async knex => {
   const files = await knex.schema.createTable('files', table => {
     table.collate('utf8_unicode_ci')
 
-    table.increments('idx').notNullable()
+    table.increments('idx').primary()
     table.string('hash').notNullable()
     table.string('original_name').notNullable()
-    table.integer('leader_id').notNullable()
+    table.integer('team_idx')
+      .notNullable()
+      .unsigned()
+      .references('idx')
+      .inTable('teams')
+      .onDelete('CASCADE')
     table.string('type').notNullable()
-
-    table.foreign('leader_id').references('teams.leader_id')
   })
 
   const followers = await knex.schema.createTable('followers', table => {
     table.collate('utf8_unicode_ci')
 
-    table.integer('idx').increments().primary()
-    table.integer('id').notNullable()
+    table.increments('idx').primary()
+    table.string('serial').notNullable()
     table.string('name').notNullable()
     table.string('contact').defaultTo('')
-    table.integer('leader_id').notNullable()
+    table.integer('team_idx')
+      .notNullable()
+      .unsigned()
+      .references('idx')
+      .inTable('teams')
+      .onDelete('CASCADE')
     table.integer('priority').notNullable()
-
-    table.foreign('leader_id').references('teams.leader_id')
   })
 
-  const notices = await knex.schema.createTable('notices', table => {
-    table.collate('utf8_unicode_ci')
-
-    table.increments('idx').primary()
-    table.timestamps(true, true)
-    table.string('message')
-  })
-
-  return [teams, files, followers, notices]
+  return [teams, files, followers]
 }
 
 exports.down = async knex => {

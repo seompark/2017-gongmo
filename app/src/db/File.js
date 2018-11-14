@@ -11,11 +11,11 @@ class File {
    * Creates an instance of File.
    * @param {{type: string, originalName: string, hash: string, leaderId: number }}
    */
-  constructor ({ type, originalName, hash, leaderId }) {
+  constructor ({ type, originalName, hash, teamIdx }) {
     this.type = type
     this.originalName = originalName
     this.hash = hash
-    this.leaderId = leaderId
+    this.teamIdx = teamIdx
   }
 
   static get TYPE () {
@@ -30,12 +30,12 @@ class File {
       type: this.type,
       original_name: this.originalName,
       hash: this.hash,
-      leader_id: this.leaderId
+      team_idx: this.teamIdx
     }
   }
 
   verifyData () {
-    if (!(this.type && this.originalName && this.hash && this.leaderId)) {
+    if (!(this.type && this.originalName && this.hash && this.teamIdx)) {
       throw new Error(`Invalid data : ${JSON.stringify(this.valueOf(), null, 2)}`)
     }
   }
@@ -45,27 +45,33 @@ class File {
     await knex('files').insert(this.valueOf())
   }
 
-  /**
-   *
-   * @param {String} leaderId
-   * @returns {Promise<{string, File}>}
-   */
-  static async findByLeaderId (leaderId) {
-    const result = await knex('files').select().where({ leader_id: leaderId })
-    return result.reduce((pv, cv) => {
-      pv[cv.type] = new File({
-        type: cv.type,
-        leaderId: cv.leader_id,
-        originalName: cv.original_name,
-        hash: cv.hash
-      })
-      return pv
-    }, {})
+  static format (file) {
+    return {
+      idx: file.idx,
+      hash: file.hash,
+      originalName: file.original_name,
+      type: file.type,
+      teamIdx: file.team_idx
+    }
   }
 
-  static async deleteLatest (leaderId, type) {
-    const files = await File.findByLeaderId(leaderId)
-    type ? files[type].delete() : files.forEach(v => v.delete())
+  /**
+   *
+   * @param {Number} idx
+   * @returns {Promise<{string, File}>}
+   */
+  static async findByTeamIdx (idx) {
+    const files = await knex('files').select().where({ team_idx: idx })
+    return files.map(File.format)
+  }
+
+  static async findByLeaderSerial (serial) {
+    
+  }
+
+  static async deleteLatest (teamIdx, type) {
+    const files = await File.findByTeamIdx(teamIdx)
+    type ? files[type] && files[type].delete() : files.forEach(v => v.delete())
   }
 
   async delete () {

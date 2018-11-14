@@ -33,6 +33,8 @@ exports.identifyUser = async (name, password) => {
   try {
     result = await dimi.identifyUser(name, password)
     result.serial = (await dimi.getStudent(name)).serial
-  } catch (err) { }
+  } catch (err) {
+    console.log(err)
+  }
   return result
 }

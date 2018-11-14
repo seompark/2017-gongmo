@@ -5,7 +5,7 @@ const archiver = require('archiver')
 const router = new Router()
 const Team = require('../src/db/Team')
 const File = require('../src/db/File')
-const Notice = require('../src/db/Notice')
+// const Notice = require('../src/db/Notice')
 
 const config = require('../../config')
 
@@ -56,14 +56,14 @@ router.route('/download')
       // 파일이 존재하면
       for (const team of teams) {
         // 파일을 가져옴
-        const file = await File.findByLeaderId(team.leader.id)
+        const file = await File.findByLeaderSerial(team.leader.serial)
         // 소스파일 처리
         Object.values(file).forEach(file => {
           if (!file) return
           archive.file(
             path.join(config.content, 'files', file.hash),
             {
-              name: `${team.name}/[${team.name} - ${team.leader.id} ${team.leader.name} ${typeNames[file.type]}] ${file.originalName}`
+              name: `${team.name}/[${team.name} - ${team.leader.serial} ${team.leader.name} ${typeNames[file.type]}] ${file.originalName}`
             }
           )
         })
@@ -71,44 +71,6 @@ router.route('/download')
     })().then(() => {
       archive.finalize()
     }).catch(console.error)
-  })
-
-router.route('/notice')
-  .get((req, res) => {
-    Notice.getList()
-      .then(notices => {
-        res.render('admin/notice', {
-          notices
-        })
-      })
-      .catch(err => {
-        console.error(err)
-        res.render('error')
-      })
-  })
-  .post((req, res) => {
-    new Notice(req.body.message)
-      .save()
-      .then(() => res.redirect('/admin/notice'))
-      .catch(err => {
-        console.error(err)
-        res.render('error')
-      })
-  })
-  .delete((req, res) => {
-    const id = req.query.id
-    Notice.delete(id)
-      .then(() => {
-        res.json({
-          success: true
-        })
-      })
-      .catch(err => {
-        console.error(err)
-        res.json({
-          success: false
-        })
-      })
   })
 
 module.exports = router

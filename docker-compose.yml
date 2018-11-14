@@ -3,17 +3,24 @@ services:
   app:
     build: .
     ports:
-      - "${APP_EXTERNAL_PORT}:${APP_INTERNAL_PORT}"
+      - ${APP_EXTERNAL_PORT}:${APP_INTERNAL_PORT}
     volumes:
-      - ./content/files:${APP}/content/files
+      - ./content:${APP}/content
+    depends_on:
+      - mysql
+    env_file: .env
   mysql:
-    image: "mysql:latest"
+    image: "mysql:5"
     environment:
-      - MYSQL_RANDOM_ROOT_PASSWORD=true
-      - MYSQL_USERNAME=${MYSQL_USERNAME}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
+      - ${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}
     volumes:
-      - ./content/db:/var/lib/mysql
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
+  node_modules:
