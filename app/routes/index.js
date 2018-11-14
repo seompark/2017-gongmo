@@ -1,16 +1,10 @@
 const path = require('path')
 const auth = require('../src/auth')
-const { isPeriod } = require('../src/utils')
-// const Notice = require('../src/db/Notice')
 
 module.exports = app => {
   app.route('/')
     .get((req, res) => {
-      res.render('index', {
-        user: req.session.user,
-        isPeriod: isPeriod(),
-        notices: []
-      })
+      res.redirect('/submit')
     })
 
   app.use('/download', auth.verifyPermission('S'))
