@@ -4,6 +4,7 @@ const auth = require('../src/auth')
 module.exports = app => {
   app.route('/')
     .get((req, res) => {
+      if (req.user && auth.hasPermission(req.user.userType, 'T')) return res.redirect('/admin')
       res.redirect('/submit')
     })
 
