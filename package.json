@@ -7,7 +7,7 @@
     "wait": "wait-on tcp:$MYSQL_HOST:$MYSQL_INTERNAL_PORT",
     "start:dev": "yarn wait && concurrently \"yarn build:dev\" \"nodemon app/app.js -L --ignore app/assets/  --ignore app/views/ --ignore content/\"",
     "start:prod": "yarn wait && pm2 start ecosystem.config.js --env production --watch",
-    "start:docker": "yarn wait && pm2-runtime start --env production confing/ecosystem.config.js",
+    "start:docker": "yarn wait && pm2-runtime start --env production config/ecosystem.config.js",
     "build:dev": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.babel.js --inline --hot",
     "build:prod": "cross-env NODE_ENV=production webpack --config config/webpack.config.babel.js --progress --hide-modules",
     "lint": "standard"
