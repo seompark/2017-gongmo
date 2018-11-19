@@ -66,7 +66,8 @@ class File {
   }
 
   static async findByLeaderSerial (serial) {
-    
+    const team = (await knex('teams').select().where({ leader_serial: serial }))[0]
+    return File.findByTeamIdx(team.idx)
   }
 
   static async deleteLatest (teamIdx, type) {

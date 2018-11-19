@@ -12,6 +12,7 @@ router.get('/:teamIdx/:type', auth.verifyPermission('S', false), (req, res) => {
 
   Team.findByTeamIdx(teamIdx)
     .then(team => {
+      if (!team) return res.status(404).render('404')
       if (
         (req.user.serial !== team.leader.serial) &&
         !auth.hasPermission(req.user.userType, 'T') &&

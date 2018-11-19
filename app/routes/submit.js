@@ -12,7 +12,7 @@ const fileupload = upload.fields([{ name: 'formfile', maxCount: 1 }, { name: 'so
 
 router.route('/')
   .get((req, res) => {
-    if (!isPeriod()) return res.redirect('/')
+    if (!isPeriod()) return res.render('error')
 
     Team.findByLeaderSerial(req.user.serial)
       .then(team => {
@@ -20,13 +20,14 @@ router.route('/')
           return res.render('submit', { user: req.user })
         }
         res.render('submit', {
+          teamIdx: team.idx,
           user: req.user,
           contact: team.leader.contact,
           followers: team.followers,
           name: team.name,
           description: team.description,
-          formfile: !!team.file[File.TYPE.FORM_FILE],
-          sourcefile: !!team.file[File.TYPE.SOURCE_FILE]
+          formfile: team.files.filter(v => v.type === File.TYPE.FORM_FILE).length > 0,
+          sourcefile: team.files.filter(v => v.type === File.TYPE.SOURCE_FILE).length > 0
         })
       })
       .catch(err => {
@@ -72,7 +73,7 @@ router.route('/')
             type,
             hash: file.filename,
             originalName: file.originalname,
-            team_idx: v.team_idx
+            teamIdx: v.idx
           }).save()
         }
       })

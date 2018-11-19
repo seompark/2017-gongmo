@@ -57,6 +57,7 @@ class Team {
    */
   async save () {
     this.verifyData()
+    this.idx = (await Team.findByLeaderSerial(this.leader.serial)).idx
     if ((await knex('teams')
       .where({ name: this.name })
       .whereNot({ leader_serial: this.leader.serial })).length > 0) {
@@ -65,17 +66,19 @@ class Team {
       throw error
     }
     const teamQuery = knex('teams').where({ leader_serial: this.leader.serial })
-    const followersQuery = knex('followers').where({ leader_serial: this.leader.serial })
+    const followersQuery = knex('followers').where({ team_idx: this.idx })
     const value = this.valueOf()
 
     if ((await teamQuery.select()).length > 0) {
       await teamQuery.update(value.team)
+      await followersQuery.delete()
     } else {
       await knex('teams').insert(value.team)
     }
 
-    await followersQuery.delete()
     await knex('followers').insert(value.followers)
+
+    return this
   }
 
   async delete () {
@@ -90,6 +93,7 @@ class Team {
     if (this.leader.name.constructor !== String) err = new TypeError(`Invalid type: leader.name should be String but ${this.leader.name.constructor}.`)
     if (isNaN(Number(this.leader.serial))) err = new TypeError(`Invalid type: leader.id should be Number but ${this.leader.id.constructor}.`)
     this.followers.forEach(v => {
+      console.log(v)
       if (v.name && v.serial && v.priority) {
         if (v.name.constructor !== String) err = new TypeError('Invalid type: follower.name which is in followers should be string.')
         if (isNaN(Number(v.serial))) err = new TypeError('Invalid type: follower.id which is in followers should be number.')

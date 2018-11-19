@@ -83,24 +83,21 @@ function main () {
       return
     }
 
-    saveBtn.className += ' is-loading'
-
     const formData = new window.FormData()
 
     formData.append('name', $('input[name="teamName"]').value || leaderName)
-    formData.append('description', $('textarea[name="description"]').value)
     formData.append('contact', $('input[name="contact"]').value)
     formData.append(
       'followers',
       JSON.stringify(
         [...$$('.follower')]
           .map((v, i) => ({
-            id: Number(v.childNodes[0].childNodes[0].value),
+            serial: Number(v.childNodes[0].childNodes[0].value),
             name: v.childNodes[1].childNodes[0].value,
             contact: v.childNodes[2].childNodes[0].value,
             priority: i + 1
           }))
-          .filter(v => v.id && v.name)
+          .filter(v => v.serial && v.name)
       )
     )
     formData.append('formfile', formFile.files[0])
@@ -125,7 +122,7 @@ function main () {
 
     axios.post('/submit', formData, {
       onUploadProgress (event) {
-        saveBtn.innerHTML = Math.floor(event.loaded * 100 / event.total)
+        saveBtn.innerHTML = Math.floor(event.loaded * 100 / event.total) + '%'
       },
       timeout: 1000 * 60 * 5
     })

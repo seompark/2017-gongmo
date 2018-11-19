@@ -12,7 +12,7 @@ module.exports = {
     notice: `${sources}/notice`
   },
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, '..', 'dist'),
     filename: '[name].bundle.js'
   },
   module: {
@@ -65,7 +65,7 @@ module.exports = {
     ]
   },
   devServer: {
-    contentBase: path.join(__dirname, 'public'),
+    contentBase: path.join(__dirname, '..', 'public'),
     watchOptions: {
       poll: true
     },

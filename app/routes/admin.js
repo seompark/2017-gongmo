@@ -26,7 +26,7 @@ router.route('/dashboard')
 
 router.route('/download')
   .get((req, res) => {
-    const zip = path.join(__dirname, '..', 'content/data/download.zip')
+    const zip = path.join(__dirname, '../..', 'content/files/download.zip')
     const output = fs.createWriteStream(zip)
     const archive = archiver('zip')
 
@@ -48,7 +48,7 @@ router.route('/download')
 
     archive.pipe(output)
     ;(async () => {
-      const teams = (await Team.getList()).filter(v => v.file.formfile || v.file.sourcefile)
+      const teams = (await Team.getList()).filter(v => v.files.length > 0)
       const typeNames = {
         [File.TYPE.FORM_FILE]: '신청서',
         [File.TYPE.SOURCE_FILE]: '소스코드'
@@ -56,9 +56,9 @@ router.route('/download')
       // 파일이 존재하면
       for (const team of teams) {
         // 파일을 가져옴
-        const file = await File.findByLeaderSerial(team.leader.serial)
+        const files = await File.findByLeaderSerial(team.leader.serial)
         // 소스파일 처리
-        Object.values(file).forEach(file => {
+        files.forEach(file => {
           if (!file) return
           archive.file(
             path.join(config.content, 'files', file.hash),

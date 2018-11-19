@@ -25,7 +25,7 @@ append contents
                 each follower in followers
                     .field.is-grouped.follower
                         .control.is-expanded
-                            input.input.is-expanded(placeholder='학번', value=follower.id)
+                            input.input.is-expanded(placeholder='학번', value=follower.serial)
                         .control.is-expanded
                             input.input(placeholder='이름', value=follower.name)
                         .control.is-expanded
@@ -63,9 +63,11 @@ append contents
                             span.file-name#formfile-name
                 if formfile
                     .control
-                        a.button(href=`/download/form/${user.serial}`) 이전 제출 파일 다운로드
+                        a.button(href=`/download/${teamIdx}/formfile/`) 이전 제출 파일 다운로드
+                .control
+                    a.button(href=`https://drive.google.com/uc?export=download&id=1vza6EU4gzdx0b2cFEAX6PuEq1PJ_4Lsi`) 양식 다운로드
         .field.form-field
-            label.label 소스코드 제출
+            label.label 시연 파일 및 소스코드 제출
             .field.is-grouped.form-field
                 .control
                     .file.has-name
@@ -79,11 +81,7 @@ append contents
                             span.file-name#sourcefile-name
                 if sourcefile
                     .control
-                        a.button(href=`/download/source/${user.serial}`) 이전 제출 파일 다운로드
-        .field
-            label.label 메모
-            .control
-                textarea.textarea(name='description')= description
+                        a.button(href=`/download/${teamIdx}/sourcefile/`) 이전 제출 파일 다운로드
         .field
             .control
                 label.checkbox
@@ -91,11 +89,6 @@ append contents
                     |  개인정보 수집 및 이용에 동의합니다.
         .field.has-text-danger
             p * 가 붙은 항목을 완성해야 최종 접수됨.
-            p
-                strong(style='color: #ff3860') 주의 : 
-                | 사전신청을 하지 않았다면 
-                a(href='https://docs.google.com/forms/d/1MpYMqj3lIC_KZMgWz-QBEup0WmzBhcKpRacfZxzClxE/edit') 이곳에서 
-                | 설문조사를 반드시 완료해주세요.
         .field.has-text-centered#message
             p &nbsp;
         .field.is-grouped.is-grouped-centered
