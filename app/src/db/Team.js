@@ -57,7 +57,7 @@ class Team {
    */
   async save () {
     this.verifyData()
-    this.idx = (await Team.findByLeaderSerial(this.leader.serial)).idx
+    this.idx = ((await Team.findByLeaderSerial(this.leader.serial)) || {}).idx
     if ((await knex('teams')
       .where({ name: this.name })
       .whereNot({ leader_serial: this.leader.serial })).length > 0) {
