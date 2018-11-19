@@ -11,7 +11,8 @@ class File {
    * Creates an instance of File.
    * @param {{type: string, originalName: string, hash: string, leaderId: number }}
    */
-  constructor ({ type, originalName, hash, teamIdx }) {
+  constructor ({ idx, type, originalName, hash, teamIdx }) {
+    this.idx = idx
     this.type = type
     this.originalName = originalName
     this.hash = hash
@@ -62,7 +63,7 @@ class File {
    */
   static async findByTeamIdx (idx) {
     const files = await knex('files').select().where({ team_idx: idx })
-    return files.map(File.format)
+    return files.map(File.format).map(v => new File(v))
   }
 
   static async findByLeaderSerial (serial) {
@@ -72,7 +73,8 @@ class File {
 
   static async deleteLatest (teamIdx, type) {
     const files = await File.findByTeamIdx(teamIdx)
-    type ? files[type] && files[type].delete() : files.forEach(v => v.delete())
+    console.log(files)
+    files.filter(v => type && (v.type === type)).forEach(v => v.delete())
   }
 
   async delete () {

@@ -30,7 +30,7 @@ function main () {
 
   function cloneFollower () {
     const follower = clonedFollower.cloneNode(true)
-    ;[0, 1].forEach(v => (follower.childNodes[v].childNodes[0].value = ''))
+    ;[0, 1, 2].forEach(v => (follower.childNodes[v].childNodes[0].value = ''))
     return follower
   }
 
@@ -40,9 +40,7 @@ function main () {
 
   function addFollower () {
     // children 이 5 + 1(label) 개 이상이면 return
-    if (followersField.children.length >= 6) return swal('이런!', '팀 인원은 팀장 포함 최대 5명입니다.', 'error')
-    // children 이 3 + 1(label) 개 이상이면 수상 제외 알림.
-    if (followersField.children.length >= 4) swal('주의!', '3번째 팀원부터는 수상에서 제외됩니다.', 'warning')
+    if (followersField.children.length >= 5) return swal('이런!', '팀 인원은 팀장 포함 최대 4명입니다.', 'error')
 
     const flw = cloneFollower()
     followersField.insertBefore(flw, addBtn.parentElement.parentElement)

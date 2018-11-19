@@ -68,7 +68,7 @@ router.route('/')
         if (Object.keys(req.files).length < 1) return
         for (const type of Object.keys(req.files)) {
           const file = req.files[type][0]
-          await File.deleteLatest(req.user.serial, type)
+          await File.deleteLatest(v.idx, type)
           await new File({
             type,
             hash: file.filename,
