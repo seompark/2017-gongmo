@@ -82,7 +82,7 @@ class Team {
   }
 
   async delete () {
-    await knex('teams').where({ team_idx: this.idx }).del()
+    await knex('teams').where({ idx: this.idx }).del()
   }
 
   verifyData () {
