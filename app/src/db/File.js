@@ -73,7 +73,6 @@ class File {
 
   static async deleteLatest (teamIdx, type) {
     const files = await File.findByTeamIdx(teamIdx)
-    console.log(files)
     files.filter(v => type && (v.type === type)).forEach(v => v.delete())
   }
 
