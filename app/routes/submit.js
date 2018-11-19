@@ -120,7 +120,7 @@ router.delete('/delete/:serial', (req, res) => {
       }
     })
   }
-  Team.findByLeaderId(req.params.serial)
+  Team.findByLeaderSerial(req.params.serial)
     .then(team =>
       team.delete()
         .then(() => File.deleteLatest(req.params.serial))
